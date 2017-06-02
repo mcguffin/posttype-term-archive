@@ -7,11 +7,6 @@ var sourcemaps = require('gulp-sourcemaps');
 var rename = require('gulp-rename');
 
 
-gulp.task('styles', function() {
-	return [
-	]
-});
-
 gulp.task('styles-admin', function() {
 	return [
     gulp.src('./src/scss/admin/admin.scss')
@@ -26,30 +21,26 @@ gulp.task('styles-admin', function() {
 gulp.task('scripts-admin', function() {
     return [ 
     	gulp.src( [
-			'./src/js/admin/admin.js',
+			'./src/js/admin/nav-menus.js',
 		] )
 			.pipe( sourcemaps.init() )
 			.pipe( uglify().on('error', gulputil.log ) )
-			.pipe( concat('admin.js') )
+//			.pipe( concat('admin.js') )
 			.pipe( sourcemaps.write() )
 			.pipe( gulp.dest( './js/admin/' ) ),
     ];
 
 });
 
-
-gulp.task( 'scripts', function(){
-} );
-
-
-gulp.task('build', ['styles','styles-admin','scripts','scripts-admin'] );
+gulp.task('build', ['styles-admin','scripts-admin'] );
 
 
 gulp.task('watch', function() {
 	// place code for your default task here
-	gulp.watch('./src/scss/**/*.scss',['styles']);
-	gulp.watch('./src/js/**/*.js',['scripts','scripts-admin']);
+	gulp.watch('./src/scss/**/*.scss',['styles-admin']);
+	gulp.watch('./src/js/**/*.js',['scripts-admin']);
 });
+
 gulp.task('default', ['build','watch']);
 
 

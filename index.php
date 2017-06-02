@@ -5,7 +5,7 @@ Plugin Name: PostType Term Archive
 Plugin URI: http://wordpress.org/
 Description: Enter description here.
 Author: Jörn Lund
-Version: 1.0.0
+Version: 0.0.1
 Author URI: 
 License: GPL3
 
@@ -43,13 +43,19 @@ define( 'POSTTYPE_TERM_ARCHIVE_DIRECTORY', plugin_dir_path(__FILE__) );
 
 require_once POSTTYPE_TERM_ARCHIVE_DIRECTORY . 'include/vendor/autoload.php';
 
+require_once POSTTYPE_TERM_ARCHIVE_DIRECTORY . 'include/api.php';
+
+// Compatibility plugins
+$compat = glob( POSTTYPE_TERM_ARCHIVE_DIRECTORY . 'include/compat/*.php');
+foreach ( $compat as $compat_file ) {
+	require_once $compat_file;
+}
+
 Core\Core::instance();
 
-
-
-
 if ( is_admin() || defined( 'DOING_AJAX' ) ) {
-
+	
+	Admin\Admin::instance();
 
 
 /*
@@ -57,11 +63,6 @@ if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 	Admin\Tools::instance();
 	Admin\Settings::instance();
 
-	// Compatibility plugins
-	$compat = glob(plugin_dir_path(__FILE__) . 'include/compat/*.php');
-	foreach ( $compat as $compat_file ) {
-		require_once $compat_file;
-	}
 */
 }
 

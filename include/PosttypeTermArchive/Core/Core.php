@@ -4,17 +4,22 @@ namespace PosttypeTermArchive\Core;
 
 class Core extends Singleton {
 
+	const SEPARATOR = '___';
+
 	/**
 	 *	Private constructor
 	 */
 	protected function __construct() {
 		add_action( 'plugins_loaded' , array( $this , 'load_textdomain' ) );
+		add_action( 'plugins_loaded' , array( $this , 'plugins_loaded' ) );
 		add_action( 'init' , array( $this , 'init' ) );
 		add_action( 'wp_enqueue_scripts' , array( $this , 'wp_enqueue_style' ) );
 
 		register_activation_hook( POSTTYPE_TERM_ARCHIVE_FILE, array( __CLASS__ , 'activate' ) );
 		register_deactivation_hook( POSTTYPE_TERM_ARCHIVE_FILE, array( __CLASS__ , 'deactivate' ) );
 		register_uninstall_hook( POSTTYPE_TERM_ARCHIVE_FILE, array( __CLASS__ , 'uninstall' ) );
+		
+		add_action( 'register_post_type_taxonomy', 'register_post_type_taxonomy', 10, 3 );
 		
 		parent::__construct();
 	}
@@ -27,7 +32,113 @@ class Core extends Singleton {
 	public function wp_enqueue_style() {
 	}
 
-	
+	public function plugins_loaded() {
+		
+		add_filter( 'wp_setup_nav_menu_item',  array( $this, 'setup_archive_item' ) );
+
+		add_filter( 'wp_nav_menu_objects', array( $this, 'maybe_make_current' ) );
+
+	}
+
+	/**
+	 * Assign menu item the appropriate url
+	 * @param  object $menu_item
+	 * @return object $menu_item
+	 */
+	public function setup_archive_item( $menu_item ) {
+		if ( $menu_item->type !== 'post_type_term_archive' )
+			return $menu_item;
+
+		@list( $post_type, $taxonomy ) = explode( self::SEPARATOR, $menu_item->object );
+		$term_id = $menu_item->object_id;
+
+		if ( ! $post_type || ! $term_id ) {
+			return $menu_item;
+		}
+		var_dump($menu_item);
+		$term = get_term( $term_id );
+		$link = get_post_type_term_link( $post_type, $term );
+
+		if ( is_wp_error( $link ) ) {
+			return $menu_item;
+		}
+
+		$menu_item->type_label = __( 'Archive', 'posttype-term-archive');
+		$menu_item->url = $link;
+
+		return $menu_item;
+	}
+
+
+	/**
+	 * Make post type archive link 'current'
+	 * @uses   Post_Type_Archive_Links :: get_item_ancestors()
+	 * @param  array $items
+	 * @return array $items
+	 * @filter wp_nav_menu_objects
+	 */
+	public function maybe_make_current( $items ) {
+		foreach ( $items as $item ) {
+			if ( 'post_type_term_archive' !== $item->type ) {
+				continue;
+			}
+			@list( $post_type, $taxonomy ) = explode( self::SEPARATOR, $item->object );
+
+			if (
+				! is_post_type_archive( $post_type )
+				&& ! is_tax( $taxonomy, $item->object_id )
+			) {
+				continue;
+			}
+			$term = get_term( $item->object_id );
+
+			// Make item current
+			$item->current = true;
+			$item->classes[] = 'current-menu-item';
+
+			// Loop through ancestors and give them 'parent' or 'ancestor' class
+			$active_anc_item_ids = $this->get_item_ancestors( $item );
+			foreach ( $items as $key => $parent_item ) {
+				$classes = (array) $parent_item->classes;
+
+				// If menu item is the parent
+				if ( $parent_item->db_id == $item->menu_item_parent ) {
+					$classes[] = 'current-menu-parent';
+					$items[ $key ]->current_item_parent = true;
+				}
+
+				// If menu item is an ancestor
+				if ( in_array( intval( $parent_item->db_id ), $active_anc_item_ids ) ) {
+					$classes[] = 'current-menu-ancestor';
+					$items[ $key ]->current_item_ancestor = true;
+				}
+
+				$items[ $key ]->classes = array_unique( $classes );
+			}
+		}
+
+		return $items;
+	}
+
+
+	/**
+	 * Get menu item's ancestors
+	 * @param  object $item
+	 * @return array  $active_anc_item_ids
+	 */
+	public function get_item_ancestors( $item ) {
+		$anc_id = absint( $item->db_id );
+
+		$active_anc_item_ids = array();
+		while (
+			$anc_id = get_post_meta( $anc_id, '_menu_item_menu_item_parent', true )
+			AND ! in_array( $anc_id, $active_anc_item_ids )
+		)
+			$active_anc_item_ids[] = $anc_id;
+
+		return $active_anc_item_ids;
+	}
+
 	/**
 	 *	Load text domain
 	 * 
@@ -67,6 +178,7 @@ class Core extends Singleton {
 	 *	Fired on plugin deactivation
 	 */
 	public static function deactivate() {
+		flush_rewrite_rules();
 	}
 
 	/**
