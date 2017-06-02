@@ -20,8 +20,18 @@ class Core extends Singleton {
 		register_uninstall_hook( POSTTYPE_TERM_ARCHIVE_FILE, array( __CLASS__ , 'uninstall' ) );
 		
 		add_action( 'register_post_type_taxonomy', 'register_post_type_taxonomy', 10, 3 );
+		add_filter( 'post_type_term_link', array( $this, 'get_post_type_term_link'), 10, 4 );
 		
 		parent::__construct();
+	}
+
+	/**
+	 *	Load frontend styles and scripts
+	 *
+	 *	@filter post_type_term_link
+	 */
+	function get_post_type_term_link( $link, $post_type , $term , $taxonomy = '' ) {
+		return get_post_type_term_link( $post_type , $term , $taxonomy );
 	}
 
 	/**

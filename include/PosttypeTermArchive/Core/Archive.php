@@ -63,12 +63,14 @@ class Archive {
 		global $wpdb;
 		
 		if ( is_object( $term ) ) {
-			if ( isset( $term->taxonomy ) )
+			if ( isset( $term->taxonomy ) ) {
 				return $term->taxonomy;
+			}
 		} else if ( is_int( $term ) ) {
 			$sql = $wpdb->prepare( "SELECT taxonomy FROM $wpdb->term_taxonomy WHERE term_id=%d" , $term );
-			if ( $taxonomy = $wpdb->get_var( $sql ))
+			if ( $taxonomy = $wpdb->get_var( $sql ) ) {
 				return $taxonomy;
+			}
 		}
 		
 		return new \WP_Error('invalid_term', __('Empty Term','posttype-term-archive'));
