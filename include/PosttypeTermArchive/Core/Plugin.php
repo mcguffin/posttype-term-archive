@@ -1,14 +1,14 @@
 <?php
 
-namespace PostTypeTermArchive\Core;
+namespace PosttypeTermArchive\Core;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
 }
 
 
-use PostTypeTermArchive\PostType;
-use PostTypeTermArchive\Compat;
+use PosttypeTermArchive\PostType;
+use PosttypeTermArchive\Compat;
 
 class Plugin extends Singleton {
 
@@ -20,9 +20,9 @@ class Plugin extends Singleton {
 	 */
 	protected function __construct() {
 
-		register_activation_hook( POSTTYPE-TERM-ARCHIVE_FILE, array( __CLASS__ , 'activate' ) );
-		register_deactivation_hook( POSTTYPE-TERM-ARCHIVE_FILE, array( __CLASS__ , 'deactivate' ) );
-		register_uninstall_hook( POSTTYPE-TERM-ARCHIVE_FILE, array( __CLASS__ , 'uninstall' ) );
+		register_activation_hook( POSTTYPE_TERM_ARCHIVE_FILE, array( __CLASS__ , 'activate' ) );
+		register_deactivation_hook( POSTTYPE_TERM_ARCHIVE_FILE, array( __CLASS__ , 'deactivate' ) );
+		register_uninstall_hook( POSTTYPE_TERM_ARCHIVE_FILE, array( __CLASS__ , 'uninstall' ) );
 
 		add_action( 'admin_init', array( $this, 'maybe_upgrade' ) );
 
@@ -34,16 +34,16 @@ class Plugin extends Singleton {
 	 */
 	public function maybe_upgrade() {
 		// trigger upgrade
-		$meta = get_plugin_data( POSTTYPE-TERM-ARCHIVE_FILE );
+		$meta = get_plugin_data( POSTTYPE_TERM_ARCHIVE_FILE );
 		$new_version = $meta['Version'];
-		$old_version = get_option( 'posttype-term-archive_version' );
+		$old_version = get_option( 'posttype_term_archive_version' );
 
 		// call upgrade
 		if ( version_compare($new_version, $old_version, '>' ) ) {
 
 			$this->upgrade( $new_version, $old_version );
 
-			update_option( 'posttype-term-archive_version', $new_version );
+			update_option( 'posttype_term_archive_version', $new_version );
 
 		}
 
@@ -54,7 +54,7 @@ class Plugin extends Singleton {
 	 */
 	public static function activate() {
 
-		$meta = get_plugin_data( POSTTYPE-TERM-ARCHIVE_FILE );
+		$meta = get_plugin_data( POSTTYPE_TERM_ARCHIVE_FILE );
 		$new_version = $meta['Version'];
 
 		update_site_option( '_version', $new_version );

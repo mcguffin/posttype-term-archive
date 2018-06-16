@@ -1,13 +1,13 @@
 <?php
 
-namespace PostTypeTermArchive\Compat;
+namespace PosttypeTermArchive\Compat;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
 }
 
 
-use PostTypeTermArchive\Core;
+use PosttypeTermArchive\Core;
 
 
 class Polylang extends Core\PluginComponent {

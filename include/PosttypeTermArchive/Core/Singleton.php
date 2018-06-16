@@ -2,6 +2,11 @@
 
 namespace PosttypeTermArchive\Core;
 
+if ( ! defined('ABSPATH') ) {
+	die('FU!');
+}
+
+
 abstract class Singleton {
 
 	/**

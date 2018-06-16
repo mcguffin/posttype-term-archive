@@ -14,8 +14,8 @@
   "plugin_author": "J\u00f6rn Lund",
   "plugin_author_uri": "",
   "plugin_name": "posttype-term-archive",
-  "plugin_namespace": "PostTypeTermArchive",
-  "plugin_slug": "posttype-term-archive",
+  "plugin_namespace": "PosttypeTermArchive",
+  "plugin_slug": "posttype_term_archive",
   "this_year": 2018,
   "wp_plugin_slug": "posttype-term-archive"
 }

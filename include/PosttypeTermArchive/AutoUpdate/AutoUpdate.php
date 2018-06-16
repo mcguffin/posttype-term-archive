@@ -1,13 +1,13 @@
 <?php
 
-namespace PostTypeTermArchive\AutoUpdate;
+namespace PosttypeTermArchive\AutoUpdate;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
 }
 
 
-use PostTypeTermArchive\Core;
+use PosttypeTermArchive\Core;
 
 abstract class AutoUpdate extends Core\Singleton {
 

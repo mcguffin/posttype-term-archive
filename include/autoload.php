@@ -1,6 +1,6 @@
 <?php
 
-namespace PostTypeTermArchive;
+namespace PosttypeTermArchive;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
@@ -31,4 +31,4 @@ function __autoload( $class ) {
 }
 
 
-spl_autoload_register( 'PostTypeTermArchive\__autoload' );
+spl_autoload_register( 'PosttypeTermArchive\__autoload' );

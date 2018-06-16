@@ -1,6 +1,6 @@
 <?php
 
-namespace PostTypeTermArchive\Core;
+namespace PosttypeTermArchive\Core;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
