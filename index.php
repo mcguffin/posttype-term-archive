@@ -6,7 +6,8 @@ Plugin URI: http://wordpress.org/
 Description: Enter description here.
 Author: Jörn Lund
 Version: 0.0.1
-Author URI: 
+Github Repository: mcguffin/post-type-term-archive
+Author URI:
 License: GPL3
 
 Text Domain: posttype-term-archive
@@ -16,7 +17,7 @@ Domain Path: /languages/
 /*  Copyright 2017  Jörn Lund
 
     This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as 
+    it under the terms of the GNU General Public License, version 2, as
     published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
@@ -54,7 +55,7 @@ foreach ( $compat as $compat_file ) {
 Core\Core::instance();
 
 if ( is_admin() || defined( 'DOING_AJAX' ) ) {
-	
+
 	Admin\Admin::instance();
 
 
@@ -65,4 +66,3 @@ if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 
 */
 }
-

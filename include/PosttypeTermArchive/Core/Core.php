@@ -2,7 +2,7 @@
 
 namespace PosttypeTermArchive\Core;
 
-class Core extends Singleton {
+class Core extends Plugin {
 
 	const SEPARATOR = '___';
 
@@ -15,16 +15,8 @@ class Core extends Singleton {
 		add_action( 'init' , array( $this , 'init' ) );
 		add_action( 'wp_enqueue_scripts' , array( $this , 'wp_enqueue_style' ) );
 
-		register_activation_hook( POSTTYPE_TERM_ARCHIVE_FILE, array( __CLASS__ , 'activate' ) );
-		register_deactivation_hook( POSTTYPE_TERM_ARCHIVE_FILE, array( __CLASS__ , 'deactivate' ) );
-		register_uninstall_hook( POSTTYPE_TERM_ARCHIVE_FILE, array( __CLASS__ , 'uninstall' ) );
-
 		add_action( 'register_post_type_taxonomy', 'register_post_type_taxonomy', 10, 3 );
-<<<<<<< HEAD
-		add_filter( 'get_post_type_term_link', array( $this, 'get_post_type_term_link'), 10, 4 );
-=======
 		add_filter( 'post_type_term_link', array( $this, 'get_post_type_term_link'), 10, 4 );
->>>>>>> c763f9d48021fe3dc66313ecb50e1625557fd3f7
 
 		parent::__construct();
 	}

@@ -1,0 +1,20 @@
+{
+  "modules": {
+    "admin": {
+      "css": true,
+      "js": true
+    },
+    "ajax": {},
+    "autoupdate": {},
+    "core": {},
+    "git": {},
+    "gulp": {}
+  },
+  "plugin_author": "J\u00f6rn Lund",
+  "plugin_author_uri": "",
+  "plugin_name": "posttype-term-archive",
+  "plugin_namespace": "PostTypeTermArchive",
+  "plugin_slug": "posttype-term-archive",
+  "this_year": 2018,
+  "wp_plugin_slug": "posttype-term-archive"
+}
