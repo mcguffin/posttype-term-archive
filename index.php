@@ -5,7 +5,7 @@ Plugin Name: PostType Term Archive
 Plugin URI: http://wordpress.org/
 Description: Enter description here.
 Author: Jörn Lund
-Version: 0.1.0
+Version: 0.1.1
 Github Repository: mcguffin/post-type-term-archive
 Author URI:
 License: GPL3
