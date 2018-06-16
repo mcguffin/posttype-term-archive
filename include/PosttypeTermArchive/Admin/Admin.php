@@ -99,7 +99,7 @@ class Admin extends Core\Singleton {
 		
 		add_meta_box(
 			self::METABOXID,
-			__( 'Post Type Term Archives', 'posttype-term-archive'),
+			__( 'Post Type Term Archives', 'posttype-term-archive' ),
 			array( $this, 'metabox' ),
 			'nav-menus',
 			'side',
@@ -123,7 +123,7 @@ class Admin extends Core\Singleton {
 											$post_type->labels->singular_name,
 											$tax_obj->labels->name 
 										),
-					'type_label'	=> __( 'Post Type Term Archive', 'posttype-term-archive'),
+					'type_label'	=> __( 'Post Type Term Archive', 'posttype-term-archive' ),
 					'type'			=> 'post_type_term_archive',
 					'object'		=> $post_type->name . Core\Core::SEPARATOR . $tax,
 				);
@@ -175,7 +175,7 @@ class Admin extends Core\Singleton {
 												$term->name 
 											),
 						'type'			=> 'post_type_term_archive',
-						'type_label'	=> __( 'Post Type Term Archive', 'posttype-term-archive'),
+						'type_label'	=> __( 'Post Type Term Archive', 'posttype-term-archive' ),
 						'url'			=> get_post_type_term_link( $post_type->name, $term ),
 					);
 				}
@@ -230,7 +230,7 @@ class Admin extends Core\Singleton {
 		// 'Add to Menu' button
 		$html .= '<p class="button-controls"><span class="add-to-menu">';
 		$html .= '<input type="submit"'. disabled( $nav_menu_selected_id, 0, false ) .' class="button-secondary
-			  submit-add-to-menu right" value="'. esc_attr__( 'Add to Menu', 'posttype-term-archive') .'" 
+			  submit-add-to-menu right" value="'. esc_attr__( 'Add to Menu', 'hptal-textdomain' ) .'" 
 			  name="add-post-type-menu-item" id="submit-post-type-term-archives" />';
 		$html .= '<span class="spinner"></span>';
 		$html .= '</span></p>';

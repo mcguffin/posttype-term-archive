@@ -15,11 +15,13 @@ function get_post_type_term_link( $post_type , $term , $taxonomy = '' ) {
 	if ( empty( $taxonomy ) ) {
 		$taxonomy = PosttypeTermArchive\Core\Archive::get_term_taxonomy( $term );
 	}
-	
+
 	if ( is_wp_error( $taxonomy ) ) {
 		return $taxonomy;
 	}
+
 	$inst = PosttypeTermArchive\Core\Archive::get( $post_type , $taxonomy );
+
 	return $inst->get_link( $term );
 }
 

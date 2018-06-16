@@ -20,8 +20,8 @@ class Core extends Singleton {
 		register_uninstall_hook( POSTTYPE_TERM_ARCHIVE_FILE, array( __CLASS__ , 'uninstall' ) );
 		
 		add_action( 'register_post_type_taxonomy', 'register_post_type_taxonomy', 10, 3 );
-		add_filter( 'post_type_term_link', array( $this, 'get_post_type_term_link'), 10, 4 );
-		
+		add_filter( 'get_post_type_term_link', array( $this, 'get_post_type_term_link'), 10, 4 );
+
 		parent::__construct();
 	}
 
@@ -31,7 +31,7 @@ class Core extends Singleton {
 	 *	@filter post_type_term_link
 	 */
 	function get_post_type_term_link( $link, $post_type , $term , $taxonomy = '' ) {
-		return get_post_type_term_link( $post_type , $term , $taxonomy );
+		return get_post_type_term_link( $post_type, $term, $taxonomy );
 	}
 
 	/**
@@ -65,7 +65,7 @@ class Core extends Singleton {
 		if ( ! $post_type || ! $term_id ) {
 			return $menu_item;
 		}
-		var_dump($menu_item);
+
 		$term = get_term( $term_id );
 		$link = get_post_type_term_link( $post_type, $term );
 
@@ -104,7 +104,10 @@ class Core extends Singleton {
 
 			// Make item current
 			$item->current = true;
-			$item->classes[] = 'current-menu-item';
+
+			if ( is_post_type_archive( $post_type ) && is_tax( $taxonomy, $item->object_id ) ) {
+				$item->classes[] = 'current-menu-item';
+			}
 
 			// Loop through ancestors and give them 'parent' or 'ancestor' class
 			$active_anc_item_ids = $this->get_item_ancestors( $item );
