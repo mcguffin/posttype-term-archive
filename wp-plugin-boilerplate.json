@@ -6,6 +6,7 @@
     },
     "ajax": {},
     "autoupdate": {},
+    "compat": {},
     "core": {},
     "git": {},
     "gulp": {}

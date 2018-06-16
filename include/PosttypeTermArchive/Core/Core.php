@@ -2,6 +2,8 @@
 
 namespace PosttypeTermArchive\Core;
 
+use PosttypeTermArchive\Compat;
+
 class Core extends Plugin {
 
 	const SEPARATOR = '___';
@@ -12,6 +14,7 @@ class Core extends Plugin {
 	protected function __construct() {
 		add_action( 'plugins_loaded' , array( $this , 'load_textdomain' ) );
 		add_action( 'plugins_loaded' , array( $this , 'plugins_loaded' ) );
+		add_action( 'plugins_loaded' , array( $this , 'init_compat' ), 0 );
 		add_action( 'init' , array( $this , 'init' ) );
 		add_action( 'wp_enqueue_scripts' , array( $this , 'wp_enqueue_style' ) );
 
@@ -19,6 +22,20 @@ class Core extends Plugin {
 		add_filter( 'post_type_term_link', array( $this, 'get_post_type_term_link'), 10, 4 );
 
 		parent::__construct();
+	}
+
+	/**
+	 *	Load Compatibility classes
+	 *
+	 *  @action plugins_loaded
+	 */
+	public function init_compat() {
+		if ( class_exists('Polylang') ) {
+			Compat\Polylang::instance();
+		}
+		if ( defined( 'WPSEO_VERSION' ) ) {
+			Compat\WPSEO::instance();
+		}
 	}
 
 	/**
