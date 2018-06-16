@@ -32,8 +32,11 @@ $term_object = get_term( $term_id, $taxonomy );
 // All these will return something like http://my-site.tld/book/publisher/rainbow-press
 // note that when you pass the term as slug, you'll have to pass the taxonomy also.
 // will return WP_Error if $post_type + $taxonomy has not been registered first.
+
 $url = apply_filters( 'post_type_term_link', '', $post_type, $term_object );
+
 $url = apply_filters( 'post_type_term_link', '', $post_type, $term_id );
+
 $url = apply_filters( 'post_type_term_link', '', $post_type, $term_slug, $taxonomy );
 ```
 

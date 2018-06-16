@@ -18,9 +18,13 @@ class Core extends Singleton {
 		register_activation_hook( POSTTYPE_TERM_ARCHIVE_FILE, array( __CLASS__ , 'activate' ) );
 		register_deactivation_hook( POSTTYPE_TERM_ARCHIVE_FILE, array( __CLASS__ , 'deactivate' ) );
 		register_uninstall_hook( POSTTYPE_TERM_ARCHIVE_FILE, array( __CLASS__ , 'uninstall' ) );
-		
+
 		add_action( 'register_post_type_taxonomy', 'register_post_type_taxonomy', 10, 3 );
+<<<<<<< HEAD
 		add_filter( 'get_post_type_term_link', array( $this, 'get_post_type_term_link'), 10, 4 );
+=======
+		add_filter( 'post_type_term_link', array( $this, 'get_post_type_term_link'), 10, 4 );
+>>>>>>> c763f9d48021fe3dc66313ecb50e1625557fd3f7
 
 		parent::__construct();
 	}
@@ -43,7 +47,7 @@ class Core extends Singleton {
 	}
 
 	public function plugins_loaded() {
-		
+
 		add_filter( 'wp_setup_nav_menu_item',  array( $this, 'setup_archive_item' ) );
 
 		add_filter( 'wp_nav_menu_objects', array( $this, 'maybe_make_current' ) );
@@ -154,7 +158,7 @@ class Core extends Singleton {
 
 	/**
 	 *	Load text domain
-	 * 
+	 *
 	 *  @action plugins_loaded
 	 */
 	public function load_textdomain() {
@@ -164,7 +168,7 @@ class Core extends Singleton {
 
 	/**
 	 *	Init hook.
-	 * 
+	 *
 	 *  @action init
 	 */
 	public function init() {

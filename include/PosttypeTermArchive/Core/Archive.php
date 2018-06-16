@@ -6,7 +6,7 @@ class Archive {
 	private $post_type;
 	private $taxonomy;
 	private $show_in_menus;
-	
+
 	private static $_instances = array();
 
 	public static function get_archives( ) {
@@ -32,7 +32,7 @@ class Archive {
 	public static function has( $post_type , $taxonomy ) {
 		return isset( self::$_instances[$post_type] ) && isset( self::$_instances[$post_type][$taxonomy] );
 	}
-	
+
 	public static function get( $post_type, $taxonomy, $show_in_menus = true ) {
 		if ( ! isset( self::$_instances[$post_type] ) ) {
 			self::$_instances[$post_type] = array();
@@ -43,25 +43,25 @@ class Archive {
 		}
 		return self::$_instances[$post_type][$taxonomy];
 	}
-	
+
 	private function __construct( $post_type, $taxonomy, $show_in_menus ) {
-				
+
 		$this->post_type = $post_type;
 		$this->taxonomy	= $taxonomy;
 		$this->show_in_menus = $show_in_menus;
 
 		add_filter( 'rewrite_rules_array', array( &$this , 'rewrite_rules' ) , 11 );
 	}
-	
+
 	/**
 	 * Return CPT Term archive link.
-	 * 
+	 *
 	 * @param	int|string|object	$term		Term ID or Term object
 	 * @return	string|WP_Error		The terms taxonomy
 	 */
 	public static function get_term_taxonomy( $term ) {
 		global $wpdb;
-		
+
 		if ( is_object( $term ) ) {
 			if ( isset( $term->taxonomy ) ) {
 				return $term->taxonomy;
@@ -72,20 +72,20 @@ class Archive {
 				return $taxonomy;
 			}
 		}
-		
+
 		return new \WP_Error('invalid_term', __('Empty Term','posttype-term-archive'));
 	}
 
-	
+
 	/**
 	 * Return CPT Term archive link.
-	 * 
+	 *
 	 * @param	int|string|object	$term		Term ID, term slug or Term object
 	 * @return	string|WP_Error	The CPT term archive Link or WP_Error on failure
 	 */
 	function get_link( $term ) {
 		global $wp_rewrite;
-		
+
 		// chack and sanitize params
 		if ( ! is_object($term) ) {
 			if ( is_int($term) ) {
@@ -105,7 +105,7 @@ class Archive {
 
 		if ( is_null( $post_type_obj ) )
 			return new \WP_Error( 'invalid_post_type' , __( 'Invalid post type' , 'posttype-term-archive') );
-		
+
 		$archive_link = get_post_type_archive_link( $this->post_type );
 
 		$termlink = $wp_rewrite->get_extra_permastruct($this->taxonomy);
@@ -137,15 +137,7 @@ class Archive {
 			$termlink = preg_replace('/^\/?/','',$termlink);
 			$archive_link = trailingslashit( $archive_link ) . $termlink;
 		}
-		/**
-		 * Filter the Post type term link.
-		 *
-		 * @param string $archive_link	Term Archive link URL.
-		 * @param object $post_type		Post Type.
-		 * @param object $term     		Term object.
-		 * @param string $taxonomy 		Taxonomy slug.
-		 */
-		return apply_filters( 'post_type_term_link', $archive_link, $this->post_type, $term, $this->taxonomy );
+		return $archive_link;
 	}
 
 	/**
@@ -153,12 +145,12 @@ class Archive {
 	 */
 	function rewrite_rules( $rules ) {
 		$post_type = $this->post_type;
-		
+
 		$pto = get_post_type_object( $this->post_type );
 		$taxo_obj = get_taxonomy($this->taxonomy);
 
 		$newrules = array();
-		if ( ( in_array( $this->taxonomy , $pto->taxonomies ) 
+		if ( ( in_array( $this->taxonomy , $pto->taxonomies )
 			|| in_array( $this->post_type , $taxo_obj->object_type ) )
 			&& $taxo_obj->public && $taxo_obj->rewrite ) {
 
@@ -178,7 +170,7 @@ class Archive {
 				} else if ( isset( $q['post_type'] ) && $q['post_type'] === $this->post_type ) {
 
 					$pt_rewrite = isset($pto->rewrite['slug']) ? $pto->rewrite['slug'] : $this->post_type;
-					
+
 					// split regex at post type
 					@list($regex_before_pt,$regex_after_pt) = explode( "{$pt_rewrite}/" , $regex );
 					// get match_index by counting braces in part before post type
@@ -192,12 +184,12 @@ class Archive {
 					$rule_after_pt = preg_replace_callback(  '/\$matches\[(\d+)\]$/' , array( $this , '_increment_matches' ) , $rule_after_pt  );
 
 					// assemble new rule
-					$newrules[$new_regex] = sprintf( '%spost_type=%s&%s=$matches[%d]%s' , 
-											$rule_before_pt , 
-											$this->post_type , 
-											$taxo_obj->query_var , 
-											$match_index , 
-											$rule_after_pt 
+					$newrules[$new_regex] = sprintf( '%spost_type=%s&%s=$matches[%d]%s' ,
+											$rule_before_pt ,
+											$this->post_type ,
+											$taxo_obj->query_var ,
+											$match_index ,
+											$rule_after_pt
 										);
 				}
 				$newrules[ $regex ] = $rule;
