@@ -34,69 +34,25 @@ class Admin extends Core\Singleton {
 
 		$this->core = Core\Core::instance();
 
-		add_action( 'plugins_loaded', array( $this , 'plugins_loaded' ) );
-	}
-
-	public function plugins_loaded() {
-		
-		$this->enable();
-		
-	}
-
-	private function enable() {
-		
-		add_action( 'admin_init', array( $this, 'get_cpts' ) );
-		
-		add_action( 'admin_init', array( $this, 'add_meta_box' ), 20 );
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'metabox_script' ) );
-		
+
 		add_action( "wp_ajax_" . self::NONCE, array( $this, 'ajax_add_post_type' ) );
-		
+
 		add_filter( 'customize_nav_menu_available_items', array( $this, 'customize_nav_menu_available_items' ), 10, 4 );
 
 		add_filter( 'customize_nav_menu_available_item_types', array( $this, 'customize_nav_menu_available_item_types' ) );
 
 	}
 
-	private function disable() {
-		
-		remove_action( 'admin_init', array( $this, 'get_cpts' ) );
-		
-		remove_action( 'admin_init', array( $this, 'add_meta_box' ), 20 );
-
-		remove_action( 'admin_enqueue_scripts', array( $this, 'metabox_script' ) );
-		
-		remove_action( "wp_ajax_" . self::NONCE, array( $this, 'ajax_add_post_type' ) );
-
-		remove_filter( 'customize_nav_menu_available_items', array( $this, 'customize_nav_menu_available_items' ), 10 );
-	}
-
 	/**
 	 * Admin init
+	 * @action admin_init
 	 */
 	public function admin_init() {
-	}
-
-
-	/**
-	 * Get CPTs that plugin should handle: having true
-	 * 'has_archive', 'publicly_queryable' and 'show_in_nav_menu'
-	 * @return void
-	 * @action admin_init
-	 */
-	public function get_cpts() {
-
 		$this->archives = Core\Archive::get_archives();
-	}
 
-	/**
-	 * Adds the meta box to the menu page
-	 * @return void
-	 * @action admin_init
-	 */
-	public function add_meta_box() {
-		
 		add_meta_box(
 			self::METABOXID,
 			__( 'Post Type Term Archives', 'posttype-term-archive' ),
@@ -106,7 +62,67 @@ class Admin extends Core\Singleton {
 			'low'
 		);
 	}
-	
+
+
+	/**
+	 * MetaBox Content Callback
+	 * @return string $html
+	 */
+	public function metabox() {
+
+		// Inform user no CPTs available to be shown.
+		if ( empty( $this->archives ) ) {
+			echo '<p>' . __( 'No items.' ) . '</p>';
+			return;
+		}
+
+		global $nav_menu_selected_id;
+
+		$html = '<ul id="'. self::METABOXLISTID .'">';
+		foreach ( $this->archives as $archive ) {
+			$post_type = $archive['post_type'];
+			foreach ( $archive['taxonomies'] as $tax => $tax_obj ) {
+				$html .= sprintf( '<li><strong>%s - %s</strong><ul>',
+					$post_type->labels->name,
+					$tax_obj->labels->name
+				);
+				$terms = get_terms( array(
+					'hide_empty'	=> false,
+					'taxonomy'		=> $tax,
+				) );
+
+				foreach ( $terms as $term ) {
+					$html .= sprintf(
+						'<li><label><input type="checkbox" value="%s%s%s" />&nbsp;%s</label></li>',
+						$post_type->name,
+						Core\Core::SEPARATOR,
+						esc_attr( $term->term_id ),
+						$term->name
+					);
+
+				}
+				$html .= '</ul></li>';
+			}
+		}
+		$html .= '</ul>';
+
+		// 'Add to Menu' button
+		$html .= '<p class="button-controls">';
+		$html .= 	'<span class="add-to-menu">';
+		$html .= 		sprintf('<input type="submit" %s ' .
+							'class="button-secondary submit-add-to-menu right" value="%s" '.
+							'name="add-post-type-menu-item" id="submit-post-type-term-archives" />',
+
+							disabled( $nav_menu_selected_id, 0, false ),
+							esc_attr__( 'Add to Menu', 'posttype-term-archive' )
+						);
+		$html .= 	'<span class="spinner"></span>';
+		$html .= 	'</span>';
+		$html .= '</p>';
+
+		print $html;
+	}
+
 	/**
 	 *	@filter customize_nav_menu_available_item_types
 	 */
@@ -119,9 +135,9 @@ class Admin extends Core\Singleton {
 
 			foreach ( $archive['taxonomies'] as $tax => $tax_obj ) {
 				$item_types[] = array(
-					'title'			=> sprintf( '%s – %s', 
+					'title'			=> sprintf( '%s – %s',
 											$post_type->labels->singular_name,
-											$tax_obj->labels->name 
+											$tax_obj->labels->name
 										),
 					'type_label'	=> __( 'Post Type Term Archive', 'posttype-term-archive' ),
 					'type'			=> 'post_type_term_archive',
@@ -170,9 +186,9 @@ class Admin extends Core\Singleton {
 						'id'			=> $term->term_id,
 						'object'		=> $post_type->name . Core\Core::SEPARATOR . $tax,
 						'object_id'		=> $term->term_id,
-						'title'			=> sprintf( '%s – %s', 
+						'title'			=> sprintf( '%s – %s',
 												$post_type->labels->name,
-												$term->name 
+												$term->name
 											),
 						'type'			=> 'post_type_term_archive',
 						'type_label'	=> __( 'Post Type Term Archive', 'posttype-term-archive' ),
@@ -186,59 +202,6 @@ class Admin extends Core\Singleton {
 	}
 
 	/**
-	 * MetaBox Content Callback
-	 * @return string $html
-	 */
-	public function metabox() {
-		
-		// Inform user no CPTs available to be shown.
-		if ( empty( $this->archives ) ) {
-			echo '<p>' . __( 'No items.' ) . '</p>';
-			return;
-		}
-		
-		global $nav_menu_selected_id;
-
-		$html = '<ul id="'. self::METABOXLISTID .'">';
-		foreach ( $this->archives as $archive ) {
-			$post_type = $archive['post_type'];
-			foreach ( $archive['taxonomies'] as $tax => $tax_obj ) {
-				$html .= sprintf( '<li><strong>%s - %s</strong><ul>',
-					$post_type->labels->name,
-					$tax_obj->labels->name 
-				);
-				$terms = get_terms( array(
-					'hide_empty'	=> false,
-					'taxonomy'		=> $tax,
-				) );
-
-				foreach ( $terms as $term ) {
-					$html .= sprintf(
-						'<li><label><input type="checkbox" value="%s%s%s" />&nbsp;%s</label></li>',
-						$post_type->name,
-						Core\Core::SEPARATOR,
-						esc_attr( $term->term_id ),
-						$term->name
-					);
-					
-				}
-				$html .= '</ul></li>';
-			}
-		}
-		$html .= '</ul>';
-
-		// 'Add to Menu' button
-		$html .= '<p class="button-controls"><span class="add-to-menu">';
-		$html .= '<input type="submit"'. disabled( $nav_menu_selected_id, 0, false ) .' class="button-secondary
-			  submit-add-to-menu right" value="'. esc_attr__( 'Add to Menu', 'hptal-textdomain' ) .'" 
-			  name="add-post-type-menu-item" id="submit-post-type-term-archives" />';
-		$html .= '<span class="spinner"></span>';
-		$html .= '</span></p>';
-		
-		print $html;
-	}
-
-	/**
 	 * Scripts for AJAX call
 	 * Only loads on nav-menus.php
 	 * @param  string $hook Page Name
@@ -249,7 +212,7 @@ class Admin extends Core\Singleton {
 		if ( 'nav-menus.php' !== $hook ) {
 			return;
 		}
-		
+
 		if ( empty( $this->archives ) ) {
 			return;
 		}
@@ -290,18 +253,18 @@ class Admin extends Core\Singleton {
 			if ( ! $post_type || ! $term_id ) {
 				continue;
 			}
-			
+
 			$post_type_obj = get_post_type_object( $post_type );
 			$term = get_term( $term_id );
-			
+
 
 			if( ! $post_type_obj )
 				continue;
 
 			$menu_item_data = array(
-				'menu-item-title'		=> sprintf( '%s – %s', 
+				'menu-item-title'		=> sprintf( '%s – %s',
 											$post_type_obj->labels->name,
-											$term->name 
+											$term->name
 										),
 				'menu-item-type'		=> 'post_type_term_archive',
 				'menu-item-object'		=> $post_type . Core\Core::SEPARATOR . $term->taxonomy,
@@ -376,7 +339,7 @@ class Admin extends Core\Singleton {
 				)
 			)
 		);
-		
+
 		empty( $post_type_terms['post_type_terms'] ) AND exit;
 		// return post types if chosen
 		return array_values( $post_type_terms['post_type_terms'] );
@@ -385,4 +348,3 @@ class Admin extends Core\Singleton {
 
 
 }
-

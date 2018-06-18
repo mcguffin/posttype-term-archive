@@ -16,7 +16,7 @@ class Polylang extends Core\PluginComponent {
 	 *	@inheritdoc
 	 */
 	protected function __construct() {
-		add_filter('pll_translation_url','polylang_post_type_term_link',10,2);
+		add_filter('pll_translation_url',array($this,'translation_url'),10,2);
 	}
 
 
