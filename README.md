@@ -3,8 +3,6 @@ PostType Term Archive
 
 Allow pretty Archive-URLs with custom post types, taxonomies and terms.  
 
-This plugin is still under development. Better don't use it in a production environment.
-
 Usage
 -----
 
