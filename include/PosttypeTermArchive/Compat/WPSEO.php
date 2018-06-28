@@ -15,7 +15,7 @@ class WPSEO extends Core\PluginComponent {
 	protected function __construct() {
 
 
-		add_filter( 'wpseo_breadcrumb_links', 'wpseo_post_type_taxonomy_breadcrumb_links' );
+		add_filter( 'wpseo_breadcrumb_links', array( $this, 'breadcrumb_links' ) );
 
 //		add_filter( 'wpseo_breadcrumb_single_link', 'wpseo_post_type_taxonomy_breadcrumb_single_link', 10, 2 );
 
