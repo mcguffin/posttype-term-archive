@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/
 Description: Enter description here.
 Author: Jörn Lund
 Version: 0.1.2
-Github Repository: mcguffin/post-type-term-archive
+Github Repository: mcguffin/posttype-term-archive
 Author URI:
 License: GPL3
 
