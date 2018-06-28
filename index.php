@@ -53,7 +53,7 @@ if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 	Admin\Admin::instance();
 
 	if ( ! file_exists( POSTTYPE_TERM_ARCHIVE_DIRECTORY . '/.git/' ) ) {
-		AutoUpdate\AutoUpdateGithub::instance();
+		AutoUpdate\AutoUpdateGithub::instance()->init( __FILE__ );
 	}
 
 
