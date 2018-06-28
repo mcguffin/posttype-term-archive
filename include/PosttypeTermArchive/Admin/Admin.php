@@ -135,10 +135,14 @@ class Admin extends Core\Singleton {
 
 			foreach ( $archive['taxonomies'] as $tax => $tax_obj ) {
 				$item_types[] = array(
+					//*
 					'title'			=> sprintf( '%s – %s',
 											$post_type->labels->singular_name,
 											$tax_obj->labels->name
 										),
+					/*/
+					'title'			=> $tax_obj->labels->name,
+					//*/
 					'type_label'	=> __( 'Post Type Term Archive', 'posttype-term-archive' ),
 					'type'			=> 'post_type_term_archive',
 					'object'		=> $post_type->name . Core\Core::SEPARATOR . $tax,
@@ -186,10 +190,14 @@ class Admin extends Core\Singleton {
 						'id'			=> $term->term_id,
 						'object'		=> $post_type->name . Core\Core::SEPARATOR . $tax,
 						'object_id'		=> $term->term_id,
+						//*
 						'title'			=> sprintf( '%s – %s',
 												$post_type->labels->name,
 												$term->name
 											),
+						/*/
+						'title'			=> $term->name,
+						//*/
 						'type'			=> 'post_type_term_archive',
 						'type_label'	=> __( 'Post Type Term Archive', 'posttype-term-archive' ),
 						'url'			=> get_post_type_term_link( $post_type->name, $term ),
@@ -262,10 +270,14 @@ class Admin extends Core\Singleton {
 				continue;
 
 			$menu_item_data = array(
+				/*
 				'menu-item-title'		=> sprintf( '%s – %s',
 											$post_type_obj->labels->name,
 											$term->name
 										),
+				/*/
+				'menu-item-title'		=> $term->name,
+				//*/
 				'menu-item-type'		=> 'post_type_term_archive',
 				'menu-item-object'		=> $post_type . Core\Core::SEPARATOR . $term->taxonomy,
 				'menu-item-object-id'	=> $term->term_id,
