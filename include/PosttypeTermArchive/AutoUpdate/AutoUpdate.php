@@ -37,11 +37,11 @@ abstract class AutoUpdate extends Core\Singleton {
 	 */
 	public function upgrade_completed( $wp_upgrader, $hook_extra ) {
 
-		$plugin = plugin_basename( POSTTYPE-TERM-ARCHIVE_FILE );
+		$plugin = plugin_basename( POSTTYPE_TERM_ARCHIVE_FILE );
 
 		if ( $hook_extra['action'] === 'update' && $hook_extra['type'] === 'plugin' && in_array( $plugin, $hook_extra['plugins'] ) ) {
 
-			$plugin_info = get_plugin_data( POSTTYPE-TERM-ARCHIVE_FILE );
+			$plugin_info = get_plugin_data( POSTTYPE_TERM_ARCHIVE_FILE );
 
 			$old_version = get_option( 'posttype-term-archive_version' );
 			$new_version = $plugin_info['Version'];
@@ -59,7 +59,7 @@ abstract class AutoUpdate extends Core\Singleton {
 	 */
 	public function plugins_api( $res, $action, $args ) {
 
-		$slug = basename(POSTTYPE-TERM-ARCHIVE_DIRECTORY);
+		$slug = basename(POSTTYPE_TERM_ARCHIVE_DIRECTORY);
 
 		if ( isset($_REQUEST['plugin']) && $_REQUEST['plugin'] === $slug ) {
 			/*
@@ -78,7 +78,7 @@ abstract class AutoUpdate extends Core\Singleton {
 			*/
 
 
-			$plugin_info	= get_plugin_data( POSTTYPE-TERM-ARCHIVE_FILE );
+			$plugin_info	= get_plugin_data( POSTTYPE_TERM_ARCHIVE_FILE );
 			$release_info	= $this->get_release_info();
 
 			$plugin_api = array(
@@ -119,7 +119,7 @@ abstract class AutoUpdate extends Core\Singleton {
 	 *	@filter upgrader_source_selection
 	 */
 	public function source_selection( $source, $remote_source, $wp_upgrader, $hook_extra ) {
-		if ( isset( $hook_extra['plugin'] ) && $hook_extra['plugin'] === plugin_basename( POSTTYPE-TERM-ARCHIVE_FILE ) ) {
+		if ( isset( $hook_extra['plugin'] ) && $hook_extra['plugin'] === plugin_basename( POSTTYPE_TERM_ARCHIVE_FILE ) ) {
 			// $source: filepath
 			// $remote_source download dir
 			$source_dirname = pathinfo( $source, PATHINFO_FILENAME);
@@ -166,9 +166,9 @@ abstract class AutoUpdate extends Core\Singleton {
 
 		// get own version
 		if ( $release_info = $this->get_release_info() ) {
-			$plugin 		= plugin_basename( POSTTYPE-TERM-ARCHIVE_FILE );
-			$slug			= basename(POSTTYPE-TERM-ARCHIVE_DIRECTORY);
-			$plugin_info	= get_plugin_data( POSTTYPE-TERM-ARCHIVE_FILE );
+			$plugin 		= plugin_basename( POSTTYPE_TERM_ARCHIVE_FILE );
+			$slug			= basename(POSTTYPE_TERM_ARCHIVE_DIRECTORY);
+			$plugin_info	= get_plugin_data( POSTTYPE_TERM_ARCHIVE_FILE );
 
 			if ( version_compare( $release_info['version'], $plugin_info['Version'] , '>' ) ) {
 
