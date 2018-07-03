@@ -3,12 +3,32 @@
 namespace PosttypeTermArchive\Core;
 
 class Archive {
+
+	/**
+	 *	@var string	The post type
+	 */
 	private $post_type;
+
+	/**
+	 *	@var string The taxonomy
+	 */
 	private $taxonomy;
+
+	/**
+	 *	@var boolean
+	 */
 	private $show_in_menus;
+
+	/**
+	 *	@var boolean
+	 */
+	private $canonical;
 
 	private static $_instances = array();
 
+	/**
+	 *	@return array Registered archives
+	 */
 	public static function get_archives( ) {
 		$archives = array();
 		foreach ( self::$_instances as $post_type => $pts ) {
@@ -29,28 +49,113 @@ class Archive {
 	}
 
 
+	/**
+	 *	@param string $post_type
+	 *	@param string $taxonomy
+	 *
+	 *	@return bool whether the archive exists
+	 */
 	public static function has( $post_type , $taxonomy ) {
 		return isset( self::$_instances[$post_type] ) && isset( self::$_instances[$post_type][$taxonomy] );
 	}
 
-	public static function get( $post_type, $taxonomy, $show_in_menus = true ) {
+	/**
+	 *	@param string $post_type
+	 *	@param string $taxonomy
+	 *	@param bool|array array(
+	 *		'show_in_menus'	=> boolean whether to show in menu enditor or not. Default true
+	 *		'canonical'		=> boolean whether to prefer the posttype archive url as canonical. Default true
+	 *	)
+	 *
+	 *	@return Archive
+	 */
+	public static function get( $post_type, $taxonomy, $args = true ) {
+		$defaults = array(
+			'show_in_menus'	=> $args === true, // backwards compatibility
+			'canonical'		=> true,
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
 		if ( ! isset( self::$_instances[$post_type] ) ) {
 			self::$_instances[$post_type] = array();
 		}
 
 		if ( ! isset( self::$_instances[$post_type][$taxonomy] ) ) {
-			self::$_instances[$post_type][$taxonomy] = new self( $post_type , $taxonomy, $show_in_menus );
+			self::$_instances[$post_type][$taxonomy] = new self( $post_type , $taxonomy, $args );
 		}
 		return self::$_instances[$post_type][$taxonomy];
 	}
 
-	private function __construct( $post_type, $taxonomy, $show_in_menus ) {
+	/**
+	 *	Get archive instance if it exists
+	 *
+	 *	@param string $post_type
+	 *	@param string $taxonomy
+	 *
+	 *	@return bool|Archive the archive or false if it doesn't exist
+	 */
+	public static function maybe_get( $post_type = null, $taxonomy = null ) {
+		if ( is_null( $post_type ) ) {
+			if ( ! is_post_type_archive() ) {
+				return false;
+			}
+			$post_type = get_post_type();
+			if ( ! post_type_exists( $post_type ) ) {
+				return false;
+			}
+		}
 
-		$this->post_type = $post_type;
-		$this->taxonomy	= $taxonomy;
-		$this->show_in_menus = $show_in_menus;
+		if ( is_null( $taxonomy ) ) {
+			if ( ! ( is_category() || is_tag() || is_tax() ) ) {
+				return false;
+			}
+			$term = get_queried_object();
+			if ( ! $term instanceof \WP_Term ) {
+				return false;
+			}
+			$taxonomy = $term->taxonomy;
+		}
 
-		add_filter( 'rewrite_rules_array', array( &$this , 'rewrite_rules' ) , 11 );
+		if ( ! self::has( $post_type, $taxonomy ) ) {
+			return false;
+		}
+		return self::get( $post_type, $taxonomy );
+	}
+
+	/**
+	 *	Private consstructor
+	 *
+	 *	@param string $post_type
+	 *	@param string $taxonomy
+	 *	@param bool|array array(
+	 *		'show_in_menus'	=> boolean whether to show in menu enditor or not. Default true
+	 *		'canonical'		=> boolean whether to prefer the posttype archive url as canonical. Default false
+	 *	)
+	 */
+	private function __construct( $post_type, $taxonomy, $args = array() ) {
+
+		extract( $args );
+
+		$this->post_type		= $post_type;
+		$this->taxonomy			= $taxonomy;
+
+		$this->show_in_menus	= $show_in_menus;
+		$this->canonical		= $canonical;
+
+		add_filter( 'rewrite_rules_array', array( $this , 'rewrite_rules' ) , 11 );
+	}
+
+	/**
+	 *	Magic getter for instance vars
+	 *
+	 *	@param string $prop option keys passed in $args
+	 *	@return mixed
+	 */
+	public function __get( $prop ) {
+		if ( isset( $this->$prop ) ) {
+			return $this->$prop;
+		}
 	}
 
 	/**
@@ -83,7 +188,7 @@ class Archive {
 	 * @param	int|string|object	$term		Term ID, term slug or Term object
 	 * @return	string|WP_Error	The CPT term archive Link or WP_Error on failure
 	 */
-	function get_link( $term ) {
+	function get_link( $term, $paged = false ) {
 		global $wp_rewrite;
 
 		// chack and sanitize params
@@ -95,48 +200,85 @@ class Archive {
 			}
 		}
 
-		if ( ! is_object($term) )
+		if ( ! is_object( $term ) ) {
 			$term = new \WP_Error('invalid_term', __('Empty Term','posttype-term-archive'));
+		}
 
-		if ( is_wp_error( $term ) )
+		if ( is_wp_error( $term ) ) {
 			return $term;
+		}
 
 		$post_type_obj = get_post_type_object( $this->post_type );
 
-		if ( is_null( $post_type_obj ) )
+		if ( is_null( $post_type_obj ) ) {
 			return new \WP_Error( 'invalid_post_type' , __( 'Invalid post type' , 'posttype-term-archive') );
+		}
 
 		$archive_link = get_post_type_archive_link( $this->post_type );
 
-		$termlink = $wp_rewrite->get_extra_permastruct($this->taxonomy);
+		$termlink = $wp_rewrite->get_extra_permastruct( $this->taxonomy );
 
 		$slug = $term->slug;
-		$t = get_taxonomy($this->taxonomy);
+		$t = get_taxonomy( $this->taxonomy );
 
-		if ( empty($termlink) ) {
-			if ( 'category' == $this->taxonomy )
+		if ( empty( $termlink ) ) {
+
+			if ( 'category' == $this->taxonomy ) {
 				$archive_link = add_query_arg( 'cat' , $term->term_id , $archive_link );
-			elseif ( $t->query_var )
+			} elseif ( $t->query_var ) {
 				$archive_link = add_query_arg( $t->query_var , $slug , $archive_link );
-			else
+			} else {
 				$archive_link = add_query_arg( array( 'taxonomy' => $this->taxonomy , 'term' => $slug ) , $t->query_var , $archive_link );
+			}
+
 		} else {
+
 			if ( $t->rewrite['hierarchical'] ) {
+
 				$hierarchical_slugs = array();
 				$ancestors = get_ancestors( $term->term_id, $this->taxonomy, 'taxonomy' );
+
 				foreach ( (array)$ancestors as $ancestor ) {
 					$ancestor_term = get_term($ancestor, $this->taxonomy);
 					$hierarchical_slugs[] = $ancestor_term->slug;
 				}
+
 				$hierarchical_slugs = array_reverse($hierarchical_slugs);
 				$hierarchical_slugs[] = $slug;
+
 				$termlink = str_replace("%$this->taxonomy%", implode('/', $hierarchical_slugs), $termlink);
+
 			} else {
+
 				$termlink =  str_replace("%$this->taxonomy%", $slug, $termlink);
 			}
+
 			$termlink = preg_replace('/^\/?/','',$termlink);
 			$archive_link = trailingslashit( $archive_link ) . $termlink;
 		}
+
+		// maybe paginate
+		if ( $paged !== false && is_numeric( $paged ) ) {
+			global $wp_rewrite;
+
+			if ( ! $wp_rewrite->using_permalinks() ) {
+				// add query var
+				if ( is_front_page() ) {
+					$archive_link = trailingslashit( $archive_link );
+				}
+				$archive_link = add_query_arg( 'paged', $paged, $archive_link );
+
+			} else {
+
+				// add paged/%d
+				if ( is_front_page() ) {
+					$archive_link = WPSEO_Sitemaps_Router::get_base_url( '' );
+				}
+				$archive_link = user_trailingslashit( trailingslashit( $archive_link ) . trailingslashit( $wp_rewrite->pagination_base ) . $paged );
+
+			}
+		}
+
 		return $archive_link;
 	}
 
@@ -198,9 +340,13 @@ class Archive {
 			$newrules = $rules;
 		}
 
-//var_dump($ret);
+
 		return $newrules;
 	}
+
+	/**
+	 *	sorting callback
+	 */
 	private function _paged_to_top( $a, $b ) {
 		$a_page = strpos( $a, 'page/([0-9]{1,})/?$' ) !== false;
 		$b_page = strpos( $b, 'page/([0-9]{1,})/?$' ) !== false;
@@ -209,8 +355,10 @@ class Archive {
 		}
 		return $a_page ? -1 : 1;
 	}
+
 	/**
-	 * @private
+	 *	Preg callback
+	 *	@private
 	 */
 	private function _increment_matches( $match ) {
 		return sprintf( '$matches[%d]' , $match[1]+1 );
