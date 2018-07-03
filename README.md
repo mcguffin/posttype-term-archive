@@ -60,7 +60,8 @@ $url = apply_filters( 'post_type_term_link', '', $post_type, $term_slug, $taxono
 ToDo
 ----
 
- - [ ] Option: Canonical Archive URLs
+ - [x] Option: WPSEO Canonical Archive URLs
+ - [ ] Integrate POst Type archive Links (menu)
  - [ ] Allow post type Archive registering on a Settings Page.
- - [ ] Add Archive URLs to Yoast SEO.
+ - [ ] Add Archive URLs to WPSEO.
  - [ ] More Testing with different Polylang setups.
