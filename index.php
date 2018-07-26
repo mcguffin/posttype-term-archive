@@ -2,12 +2,12 @@
 
 /*
 Plugin Name: PostType Term Archive
-Plugin URI: http://wordpress.org/
+Plugin URI: https://github.com/mcguffin/posttype-term-archive
 Description: Enter description here.
 Author: Jörn Lund
 Version: 0.1.5
 Github Repository: mcguffin/posttype-term-archive
-Author URI:
+Author URI: https://github.com/mcguffin/
 License: GPL3
 
 Text Domain: posttype-term-archive

@@ -18,6 +18,24 @@ Doing the same, but show some links in WP Menu editor:
 do_action('register_post_type_taxonomy', 'book', 'publisher', true );
 ```
 
+Aequivalent to the above
+
+```
+do_action('register_post_type_taxonomy', 'book', 'publisher', array(
+	'show_in_menu'	=> true,
+) );
+```
+
+Use /<post_type>/<taxonomy>/<term>/ to generate canonical / links.  
+Requires [WP SEO](https://wordpress.org/plugins/wordpress-seo/)
+
+```
+do_action('register_post_type_taxonomy', 'book', 'publisher', array(
+	'canonical'		=> true,
+) );
+```
+
+
 Getting a specfic post type term archive URL:
 
 ```
@@ -42,6 +60,8 @@ $url = apply_filters( 'post_type_term_link', '', $post_type, $term_slug, $taxono
 ToDo
 ----
 
+ - [x] Option: WPSEO Canonical Archive URLs
+ - [ ] Integrate POst Type archive Links (menu)
  - [ ] Allow post type Archive registering on a Settings Page.
- - [ ] Add Archive URLs to Yoast SEO.
+ - [ ] Add Archive URLs to WPSEO.
  - [ ] More Testing with different Polylang setups.
