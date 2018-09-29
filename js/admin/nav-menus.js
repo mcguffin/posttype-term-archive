@@ -3,7 +3,7 @@
 		 $( '#submit-post-type-term-archives' ).click( function( event ) {
 
 			event.preventDefault();
-		
+
 			var $list_items = $( '#' + pt_term_archives.metabox_list_id + ' li :checked' ),
 				$submit = $( this );
 
@@ -12,10 +12,10 @@
 			$list_items.each( function() {
 				terms.push( $( this ).val() );
 			} );
-		
+
 			// Show spinner
 			$( '#' + pt_term_archives.metabox_id ).find('.spinner').show();
-		
+
 			// Disable button
 			$submit.prop( 'disabled', true );
 
@@ -35,7 +35,6 @@
 					$submit.prop( 'disabled', false );
 				}
 			);
-		} );
-	} );
-
+		});
+	});
 })(jQuery)

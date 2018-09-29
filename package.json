@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com//posttype-term-archive#readme",
   "devDependencies": {
-    "gulp": "*",
+    "gulp": "^4.0.0",
     "gulp-autoprefixer": "*",
     "gulp-concat": "*",
     "gulp-rename": "*",

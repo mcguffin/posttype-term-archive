@@ -54,26 +54,21 @@ gulp.task('scss', function() {
 
 
 gulp.task('js-admin', function() {
-    return [
-		do_js('admin/admin'),
-		do_js('admin/nav-menus'),
-    ];
-
+    return do_js('admin/admin');
 });
+gulp.task('js-nav-menus', function() {
+    return do_js('admin/nav-menus');
+});
+gulp.task('js', gulp.parallel('js-admin','js-nav-menus'));
 
 
-gulp.task( 'js', function(){
-	return concat_js( [
-	], 'frontend.js');
-} );
 
-
-gulp.task('build', ['scss','js','js-admin'] );
+gulp.task('build', gulp.parallel('js') );
 
 
 gulp.task('watch', function() {
 	// place code for your default task here
-	gulp.watch('./src/scss/**/*.scss',[ 'scss' ]);
-	gulp.watch('./src/js/**/*.js',[ 'js', 'js-admin' ]);
+	gulp.watch('./src/scss/**/*.scss', gulp.parallel('scss') );
+	gulp.watch('./src/js/**/*.js',gulp.parallel('js'));
 });
-gulp.task('default', ['build','watch']);
+gulp.task('default', gulp.series('build','watch'));
