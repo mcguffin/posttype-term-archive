@@ -30,22 +30,24 @@ class Archive {
 	 *	@return array Registered archives
 	 */
 	public static function get_archives( ) {
-		$archives = array();
-		foreach ( self::$_instances as $post_type => $pts ) {
+		$get_archives = array();
+		foreach ( self::$_instances as $post_type => $archives ) {
 			$taxonomies = array();
-			foreach ( $pts as $taxonomy => $instance ) {
+			foreach ( $archives as $taxonomy => $instance ) {
 				if ( $instance->show_in_menus ) {
+
 					$taxonomies += get_taxonomies( array( 'name' => $taxonomy ), 'object' );
 				}
 			}
+
 			if ( ! empty( $taxonomies ) ) {
-				$archives[] = array(
+				$get_archives[] = array(
 					'post_type'		=> get_post_type_object( $post_type ),
 					'taxonomies'	=> $taxonomies,
 				);
 			}
 		}
-		return $archives;
+		return $get_archives;
 	}
 
 
@@ -71,7 +73,7 @@ class Archive {
 	 */
 	public static function get( $post_type, $taxonomy, $args = true ) {
 		$defaults = array(
-			'show_in_menus'	=> $args === true, // backwards compatibility
+			'show_in_menus'	=> $args === true || ( is_array($args) && ! isset( $args['show_in_menus'] )), // backwards compatibility
 			'canonical'		=> true,
 		);
 

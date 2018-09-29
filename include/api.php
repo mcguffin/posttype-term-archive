@@ -33,15 +33,16 @@ function get_post_type_term_link( $post_type , $term , $taxonomy = '' ) {
  * @param	string			$taxonomy	Taxonomy name. Mandatory if $term is a slug
  */
 
-function register_post_type_taxonomy( $post_type , $taxonomy, $show_in_menus = true ) {
+function register_post_type_taxonomy( $post_type , $taxonomy, $args = null ) {
 	if ( ! post_type_exists( $post_type ) ) {
 		return new WP_Error('post_type_taxonomy', sprintf(__('Invalid Post Type %s','posttype-term-archive'), $post_type ));
 	}
 	if ( ! taxonomy_exists($taxonomy) ) {
 		return new WP_Error('post_type_taxonomy', sprintf(__('Invalid Taxonomy %s','posttype-term-archive'), $taxonomy ));
 	}
+	$ret = PosttypeTermArchive\Core\Archive::get( $post_type , $taxonomy, $args );
 
-	return PosttypeTermArchive\Core\Archive::get( $post_type , $taxonomy, $show_in_menus );
+	return $ret;
 }
 
 
