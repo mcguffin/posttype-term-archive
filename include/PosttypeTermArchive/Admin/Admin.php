@@ -51,16 +51,25 @@ class Admin extends Core\Singleton {
 	 * @action admin_init
 	 */
 	public function admin_init() {
-		$this->archives = Core\Archive::get_archives();
 
-		add_meta_box(
-			self::METABOXID,
-			__( 'Post Type Term Archives', 'posttype-term-archive' ),
-			array( $this, 'metabox' ),
-			'nav-menus',
-			'side',
-			'low'
-		);
+		$this->archives = Core\Archive::get_archives();
+		foreach ( $this->archives as $archive ) {
+			$pto = $archive['post_type'];
+			foreach ( $archive['taxonomies'] as $tax => $txo ) {
+				$box_id = sprintf( 'posttype-archive-%s-%s', $pto->name, $txo->name );
+
+				add_meta_box(
+					$box_id,
+					sprintf( '%s %s', $pto->labels->singular_name, $txo->labels->name ),
+					array( $this, 'metabox' ),
+					'nav-menus',
+					'side',
+					'low',
+					array( 'post_type' => $pto, 'taxonomy' => $txo )
+				);
+
+			}
+		}
 	}
 
 
@@ -68,53 +77,52 @@ class Admin extends Core\Singleton {
 	 * MetaBox Content Callback
 	 * @return string $html
 	 */
-	public function metabox() {
+	public function metabox( $object, $box ) {
+
+		global $nav_menu_selected_id;
+
+		$post_type = $box['args']['post_type'];
+		$taxonomy = $box['args']['taxonomy'];
+
+		$terms = get_terms( array(
+			'hide_empty'	=> false,
+			'taxonomy'		=> $taxonomy->name,
+		) );
 
 		// Inform user no CPTs available to be shown.
-		if ( empty( $this->archives ) ) {
+		if ( empty( $terms ) ) {
 			echo '<p>' . __( 'No items.' ) . '</p>';
 			return;
 		}
 
-		global $nav_menu_selected_id;
+		$box_id = sprintf( 'posttype-archive-%s-%s', $post_type->name, $taxonomy->name );
 
-		$html = '<ul id="'. self::METABOXLISTID .'">';
-		foreach ( $this->archives as $archive ) {
-			$post_type = $archive['post_type'];
-			foreach ( $archive['taxonomies'] as $tax => $tax_obj ) {
-				$html .= sprintf( '<li><strong>%s - %s</strong><ul>',
-					$post_type->labels->name,
-					$tax_obj->labels->name
-				);
-				$terms = get_terms( array(
-					'hide_empty'	=> false,
-					'taxonomy'		=> $tax,
-				) );
+		$html = sprintf( '<ul id="%s">', $box_id );
 
-				foreach ( $terms as $term ) {
-					$html .= sprintf(
-						'<li><label><input type="checkbox" value="%s%s%s" />&nbsp;%s</label></li>',
-						$post_type->name,
-						Core\Core::SEPARATOR,
-						esc_attr( $term->term_id ),
-						$term->name
-					);
+		foreach ( $terms as $term ) {
+			$html .= sprintf(
+				'<li><label><input type="checkbox" value="%s%s%s" />&nbsp;%s</label></li>',
+				$post_type->name,
+				Core\Core::SEPARATOR,
+				esc_attr( $term->term_id ),
+				$term->name
+			);
 
-				}
-				$html .= '</ul></li>';
-			}
 		}
+
 		$html .= '</ul>';
 
 		// 'Add to Menu' button
 		$html .= '<p class="button-controls">';
 		$html .= 	'<span class="add-to-menu">';
-		$html .= 		sprintf('<input type="submit" %s ' .
-							'class="button-secondary submit-add-to-menu right" value="%s" '.
-							'name="add-post-type-menu-item" id="submit-post-type-term-archives" />',
+		$html .= 		sprintf('<input type="submit" %1$s ' .
+							'class="button-secondary submit-add-to-menu add-post-type-term-menu-item right" value="%2$s" '.
+							'name="add-post-type-term-menu-item-%3$s-%4$s" id="submit-post-type-term-archives-%3$s-%4$s" />',
 
 							disabled( $nav_menu_selected_id, 0, false ),
-							esc_attr__( 'Add to Menu', 'posttype-term-archive' )
+							esc_attr__( 'Add to Menu', 'posttype-term-archive' ),
+							$post_type->name,
+							$taxonomy->name
 						);
 		$html .= 	'<span class="spinner"></span>';
 		$html .= 	'</span>';

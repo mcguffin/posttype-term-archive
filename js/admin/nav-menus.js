@@ -1,20 +1,18 @@
 (function($){
-	$( document ).ready( function() {
-		 $( '#submit-post-type-term-archives' ).click( function( event ) {
 
-			event.preventDefault();
+	$( document ).ready(function(){
+		$( '.add-post-type-term-menu-item').click( function(e) {
 
-			var $list_items = $( '#' + pt_term_archives.metabox_list_id + ' li :checked' ),
-				$submit = $( this );
+			e.preventDefault();
 
-			// Get checked boxes
-			var terms = [];
+			var $submit = $(this),
+				$list_items = $submit.closest('.inside').find('[type="checkbox"]:checked'),
+				$spinner = $submit.next('.spinner').show(),
+				terms = [];
+
 			$list_items.each( function() {
 				terms.push( $( this ).val() );
-			} );
-
-			// Show spinner
-			$( '#' + pt_term_archives.metabox_id ).find('.spinner').show();
+			});
 
 			// Disable button
 			$submit.prop( 'disabled', true );
@@ -30,7 +28,7 @@
 				// AJAX returns html to add to the menu, hide spinner, remove checks
 				function( response ) {
 					$( '#menu-to-edit' ).append( response );
-					$( '#' + pt_term_archives.metabox_id ).find('.spinner').hide();
+					$spinner.hide();
 					$list_items.prop("checked", false);
 					$submit.prop( 'disabled', false );
 				}
