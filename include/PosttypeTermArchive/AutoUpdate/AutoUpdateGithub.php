@@ -1,5 +1,9 @@
 <?php
-
+/**
+ *	@package PosttypeTermArchive\AutoUpdate
+ *	@version 1.0.0
+ *	2018-09-22
+ */
 namespace PosttypeTermArchive\AutoUpdate;
 
 if ( ! defined('ABSPATH') ) {

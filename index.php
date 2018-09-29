@@ -7,6 +7,7 @@ Description: Enter description here.
 Author: Jörn Lund
 Version: 0.1.6
 Github Repository: mcguffin/posttype-term-archive
+Github Plugin URI: mcguffin/posttype-term-archive
 Author URI: https://github.com/mcguffin/
 License: GPL3
 
@@ -39,28 +40,27 @@ Command line args were: `"PostType Term Archive" admin+css+js gulp git --force`
 
 namespace PosttypeTermArchive;
 
-define( 'POSTTYPE_TERM_ARCHIVE_FILE', __FILE__ );
-define( 'POSTTYPE_TERM_ARCHIVE_DIRECTORY', plugin_dir_path(__FILE__) );
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'include/autoload.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'include/api.php';
 
-require_once POSTTYPE_TERM_ARCHIVE_DIRECTORY . 'include/vendor/autoload.php';
-
-require_once POSTTYPE_TERM_ARCHIVE_DIRECTORY . 'include/api.php';
-
-Core\Core::instance();
+Core\Core::instance( __FILE__ );
 
 if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 
 	Admin\Admin::instance();
 
-	if ( ! file_exists( POSTTYPE_TERM_ARCHIVE_DIRECTORY . '/.git/' ) ) {
-		AutoUpdate\AutoUpdateGithub::instance()->init( __FILE__ );
+	if ( ! file_exists( plugin_dir_path(__FILE__) . '/.git/' ) ) {
+
+		// not a git. Check if https://github.com/afragen/github-updater is active. (function is_plugin_active not available yet)
+		$active_plugins = get_option('active_plugins');
+		if ( $sitewide_plugins = get_site_option('active_sitewide_plugins') ) {
+			$active_plugins = array_merge( $active_plugins, array_keys( $sitewide_plugins ) );
+		}
+
+		if ( ! in_array( 'github-updater/github-updater.php', $active_plugins ) ) {
+			// not github updater. Init our our own...
+			AutoUpdate\AutoUpdateGithub::instance();
+		}
 	}
 
-
-/*
-	Admin\Admin::instance();
-	Admin\Tools::instance();
-	Admin\Settings::instance();
-
-*/
 }

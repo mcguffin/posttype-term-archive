@@ -48,8 +48,7 @@ function concat_js( src, dest ) {
 
 
 gulp.task('scss', function() {
-	return [
-	];
+	return ;
 });
 
 
