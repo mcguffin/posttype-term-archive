@@ -62,3 +62,15 @@ function has_post_type_taxonomy( $post_type , $taxonomy ) {
 
 	return PosttypeTermArchive\Core\Archive::has( $post_type , $taxonomy );
 }
+
+
+
+
+/**
+ * Return CPT Archive page
+ *
+ * @param	string			$post_type	The Post Type
+ */
+function get_post_type_archive_page_id( $post_type )
+	return PosttypeTermArchive\Core\Core::instance()->get_post_type_archive_page_id( $post_type );
+}

@@ -19,9 +19,6 @@ class Core extends Plugin {
 		add_action( 'init' , array( $this , 'init' ) );
 		add_action( 'wp_enqueue_scripts' , array( $this , 'wp_enqueue_style' ) );
 
-		add_action( 'register_post_type_taxonomy', 'register_post_type_taxonomy', 10, 3 );
-		add_filter( 'post_type_term_link', array( $this, 'get_post_type_term_link'), 10, 4 );
-
 
 		// posttype archive pages
 		add_filter( 'nav_menu_css_class', array( $this, 'nav_item_css_class' ), 10, 5 );
@@ -70,6 +67,20 @@ class Core extends Plugin {
 	}
 
 	/**
+	 *	@param $page
+	 *	@param $post_type
+	 */
+	public function get_post_type_archive_page_id( $post_type = 'post' ) {
+		if ( ! $archive_settings = get_option('post_type_archive_pages')) {
+			return false;
+		}
+		if ( ! isset( $archive_settings[ $post_type ] ) ) {
+			return false;
+		}
+		return $archive_settings[ $post_type ];
+	}
+
+	/**
 	 *	Load Compatibility classes
 	 *
 	 *  @action plugins_loaded
@@ -88,9 +99,10 @@ class Core extends Plugin {
 	 *
 	 *	@filter post_type_term_link
 	 */
-	function get_post_type_term_link( $link, $post_type , $term , $taxonomy = '' ) {
+	public function get_post_type_term_link( $link, $post_type , $term , $taxonomy = '' ) {
 		return get_post_type_term_link( $post_type, $term, $taxonomy );
 	}
+
 
 	/**
 	 *	Load frontend styles and scripts
