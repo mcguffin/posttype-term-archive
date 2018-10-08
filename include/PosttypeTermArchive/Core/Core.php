@@ -123,7 +123,9 @@ class Core extends Plugin {
 			return;
 		}
 
-		$archive_settings = get_option('posttype_term_archives');
+		if ( ! $archive_settings = get_option('posttype_term_archives')) {
+			return;
+		}
 
 		foreach ( $archive_settings as $post_type => $taxonomies ) {
 			foreach ( $taxonomies as $tax => $args ) {
