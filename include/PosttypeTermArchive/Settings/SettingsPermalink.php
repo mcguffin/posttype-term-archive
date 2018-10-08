@@ -157,7 +157,7 @@ class SettingsPermalink extends Settings {
 			<label for="<?php echo $id ?>-show_in_menus">
 				<?php _e('Show in Menus','posttype-term-archives'); ?>
 			</label>
-			
+
 			<code>
 				<?php
 				// print example URL
@@ -166,7 +166,6 @@ class SettingsPermalink extends Settings {
 					'name'		=> _x('Example Term','Term Name', 'posttype-term-archive'),
 					'slug'		=> _x('example-term','Term Slug', 'posttype-term-archive'),
 				)) );
-
 				?>
 			</code>
 		</p>

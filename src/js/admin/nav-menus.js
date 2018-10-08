@@ -8,10 +8,10 @@
 			var $submit = $(this),
 				$list_items = $submit.closest('.inside').find('[type="checkbox"]:checked'),
 				$spinner = $submit.next('.spinner').show(),
-				terms = [];
+				items = [];
 
 			$list_items.each( function() {
-				terms.push( $( this ).val() );
+				items.push( $( this ).val() );
 			});
 
 			// Disable button
@@ -19,10 +19,10 @@
 
 			// Send checked post types with our action, and nonce
 			$.post( pt_term_archives.ajaxurl, {
-					action: pt_term_archives.action,
-					posttypearchive_nonce: pt_term_archives.nonce,
-					post_type_terms: terms,
-					nonce: pt_term_archives.nonce
+					action: 				$(this).data('action'),
+					posttypearchive_nonce:	$(this).data('nonce'),
+					items:					items,
+					nonce:					$(this).data('nonce')
 				},
 
 				// AJAX returns html to add to the menu, hide spinner, remove checks
@@ -35,4 +35,4 @@
 			);
 		});
 	});
-})(jQuery)
+})(jQuery);
