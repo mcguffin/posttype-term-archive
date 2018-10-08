@@ -22,8 +22,11 @@ class Archive {
 	/**
 	 *	@var boolean
 	 */
-	private $canonical;
+	private $show_in_settings = false;
 
+	/**
+	 *	@var array
+	 */
 	private static $_instances = array();
 
 	/**
@@ -66,15 +69,14 @@ class Archive {
 	 *	@param string $taxonomy
 	 *	@param bool|array array(
 	 *		'show_in_menus'	=> boolean whether to show in menu enditor or not. Default true
-	 *		'canonical'		=> boolean whether to prefer the posttype archive url as canonical. Default true
 	 *	)
 	 *
 	 *	@return Archive
 	 */
 	public static function get( $post_type, $taxonomy, $args = true ) {
 		$defaults = array(
-			'show_in_menus'	=> $args === true || ( is_array($args) && ! isset( $args['show_in_menus'] )), // backwards compatibility
-			'canonical'		=> true,
+			'show_in_menus'		=> $args === true || ( is_array($args) && ! isset( $args['show_in_menus'] )), // backwards compatibility
+			'show_in_settings'	=> false,
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -126,13 +128,13 @@ class Archive {
 	}
 
 	/**
-	 *	Private consstructor
+	 *	Private constructor
 	 *
 	 *	@param string $post_type
 	 *	@param string $taxonomy
 	 *	@param bool|array array(
-	 *		'show_in_menus'	=> boolean whether to show in menu enditor or not. Default true
-	 *		'canonical'		=> boolean whether to prefer the posttype archive url as canonical. Default false
+	 *		'show_in_menus'		=> boolean whether to show in menu enditor or not. Default true
+	 *		'show_in_settings'	=> boolean whether to make this archive configurable in the settings. Default false
 	 *	)
 	 */
 	private function __construct( $post_type, $taxonomy, $args = array() ) {
@@ -143,9 +145,17 @@ class Archive {
 		$this->taxonomy			= $taxonomy;
 
 		$this->show_in_menus	= $show_in_menus;
-		$this->canonical		= $canonical;
+		$this->show_in_settings	= $show_in_settings;
 
-		add_filter( 'rewrite_rules_array', array( $this , 'rewrite_rules' ) , 11 );
+		add_filter( 'rewrite_rules_array', array( $this, 'rewrite_rules' ) , 11 );
+	}
+
+	/**
+	 *	Destructor
+	 */
+	public function __destruct() {
+		remove_filter( 'rewrite_rules_array', array( $this, 'rewrite_rules' ), 11 );
+		//self::$_instances[ $this->post_type ][ $this->taxonomy ] = null;
 	}
 
 	/**

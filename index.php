@@ -48,6 +48,8 @@ Core\Core::instance( __FILE__ );
 if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 
 	Admin\Admin::instance();
+	Settings\SettingsReading::instance();
+
 
 	if ( ! file_exists( plugin_dir_path(__FILE__) . '/.git/' ) ) {
 

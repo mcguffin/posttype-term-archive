@@ -1,0 +1,33 @@
+/* Both Admin Menu and Post Formats */
+/* Post Format Icons */
+/* Welcome Screen Icons */
+/* Image Editing Icons */
+/* Both Image Editing and TinyMCE */
+/* TinyMCE Icons */
+/* Post Icons */
+/* Sorting */
+/* WPorg specific icons: Jobs, Profiles, WordCamps */
+/* Internal/Products */
+/* Taxonomies */
+/* Widget icons */
+/* Media icons */
+/* Alerts/Notifications/Flags */
+/* Social Icons */
+/* Misc/CPT */
+.posttype-term-archive-setting label {
+  display: inline-block;
+  margin: 0 0.75em 0.5em 0; }
+
+.posttype-term-archive-setting [type="checkbox"] {
+  margin: 0 0.25em 0.5em 0 !important; }
+  .posttype-term-archive-setting [type="checkbox"][id$="-enabled"] + label ~ * {
+    display: none; }
+  .posttype-term-archive-setting [type="checkbox"][id$="-enabled"]:checked + label ~ * {
+    display: inline-block; }
+
+.posttype-term-archive-setting code {
+  display: block; }
+  .posttype-term-archive-setting code:before {
+    content: '';
+    width: 100%;
+    float: right; }

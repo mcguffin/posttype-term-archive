@@ -48,7 +48,7 @@ function concat_js( src, dest ) {
 
 
 gulp.task('scss', function() {
-	return ;
+	return do_scss('admin/settings/permalink');
 });
 
 
@@ -62,7 +62,7 @@ gulp.task('js', gulp.parallel('js-admin','js-nav-menus'));
 
 
 
-gulp.task('build', gulp.parallel('js') );
+gulp.task('build', gulp.parallel('js','scss') );
 
 
 gulp.task('watch', function() {

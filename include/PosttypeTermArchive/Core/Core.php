@@ -15,13 +15,58 @@ class Core extends Plugin {
 
 		add_action( 'plugins_loaded' , array( $this , 'plugins_loaded' ) );
 		add_action( 'plugins_loaded' , array( $this , 'init_compat' ), 0 );
+		add_action( 'init' , array( $this , 'apply_settings' ), 0xffffffff );
 		add_action( 'init' , array( $this , 'init' ) );
 		add_action( 'wp_enqueue_scripts' , array( $this , 'wp_enqueue_style' ) );
 
 		add_action( 'register_post_type_taxonomy', 'register_post_type_taxonomy', 10, 3 );
 		add_filter( 'post_type_term_link', array( $this, 'get_post_type_term_link'), 10, 4 );
+
+
+		// posttype archive pages
+		add_filter( 'nav_menu_css_class', array( $this, 'nav_item_css_class' ), 10, 5 );
+		add_filter( 'page_link', array( $this, 'page_link' ), 10, 2 );
+
 		$args = func_get_args();
 		parent::__construct( ...$args );
+	}
+
+
+	/**
+	 *	@filter nav_menu_css_class
+	 */
+	public function nav_item_css_class( $classes, $item, $args, $depth ) {
+
+		if ( 'page' === $item->object ) {
+
+			if ( $this->is_archive_page( $item->object_id ) ) {
+				$classes[] = 'current-menu-parent';
+			}
+
+		}
+		return $classes;
+	}
+
+
+	/**
+	 *	@filter page_link
+	 */
+	public function page_link( $link, $post_id ) {
+
+		if ( $post_type = $this->is_archive_page( $post_id ) ) {
+			$link = get_post_type_archive_link( $post_type );
+		}
+
+		return $link;
+	}
+
+	/**
+	 *	Is $page_id a configured post type archive
+	 *	@return bool
+	 */
+	public function is_archive_page( $page_id ) {
+
+		return array_search( $page_id, get_option('post_type_archive_pages') );
 	}
 
 	/**
@@ -55,12 +100,38 @@ class Core extends Plugin {
 	public function wp_enqueue_style() {
 	}
 
+	/**
+	 *	@action plugins_loaded
+	 */
 	public function plugins_loaded() {
+
+		// apply settings
+
 
 		add_filter( 'wp_setup_nav_menu_item',  array( $this, 'setup_archive_item' ) );
 
 		add_filter( 'wp_nav_menu_objects', array( $this, 'maybe_make_current' ) );
 
+	}
+
+	/**
+	 *	@action init
+	 */
+	public function apply_settings() {
+
+		if ( ! apply_filters( 'posttype_term_archive_settings', true ) ) {
+			return;
+		}
+
+		$archive_settings = get_option('posttype_term_archives');
+
+		foreach ( $archive_settings as $post_type => $taxonomies ) {
+			foreach ( $taxonomies as $tax => $args ) {
+				if ( isset( $args[ 'enabled' ] ) ) {
+					register_post_type_taxonomy( $post_type, $tax, $args + array( 'show_in_settings' => true ) );
+				}
+			}
+		}
 	}
 
 	/**

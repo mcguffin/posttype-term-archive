@@ -1,0 +1,31 @@
+@import '../../variables/variables';
+
+@import '../../mixins/mixins';
+
+.posttype-term-archive-setting {
+	label {
+		display:inline-block;
+		margin:0 0.75em 0.5em 0;
+	}
+	[type="checkbox"] {
+		margin: 0 0.25em 0.5em 0 !important;
+		&[id$="-enabled"] {
+			& + label ~ * {
+				display:none;
+			}
+			&:checked {
+				& + label ~ * {
+					display:inline-block;
+				}
+			}
+		}
+	}
+	code {
+		display:block;
+		&:before {
+			content:'';
+			width:100%;
+			float:right;
+		}
+	}
+}

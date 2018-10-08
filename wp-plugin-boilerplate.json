@@ -9,7 +9,12 @@
     "compat": {},
     "core": {},
     "git": {},
-    "gulp": {}
+    "gulp": {},
+    "settings": {
+      "permalink": {
+        "css": true
+      }
+    }
   },
   "plugin_author": "J\u00f6rn Lund",
   "plugin_author_uri": "",

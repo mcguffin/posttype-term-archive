@@ -25,7 +25,7 @@ class WPSEO extends Core\PluginComponent {
 	 */
 	public function canonical( $canonical ) {
 
-		if ( $archive = Core\Archive::maybe_get() ) {
+		if ( ( $archive = Core\Archive::maybe_get() ) && $archive->canonical ) {
 
 			$paged = get_query_var( 'paged' ) > 1 ? get_query_var( 'paged' ) : false;
 

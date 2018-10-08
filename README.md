@@ -18,7 +18,7 @@ Doing the same, but show some links in WP Menu editor:
 do_action('register_post_type_taxonomy', 'book', 'publisher', true );
 ```
 
-Aequivalent to the above
+Same as above
 
 ```
 do_action('register_post_type_taxonomy', 'book', 'publisher', array(
@@ -26,13 +26,21 @@ do_action('register_post_type_taxonomy', 'book', 'publisher', array(
 ) );
 ```
 
-Use /<post_type>/<taxonomy>/<term>/ to generate canonical / links.  
-Requires [WP SEO](https://wordpress.org/plugins/wordpress-seo/)
+Same as above but allow admin to disable the archive in permalink settings
 
 ```
 do_action('register_post_type_taxonomy', 'book', 'publisher', array(
-	'canonical'		=> true,
+	'show_in_menu'		=> true,
+	'show_in_settings'	=> true,
 ) );
+```
+
+Disable configurability entirely:
+
+```
+// filter must be added before or during `plugins_loaded`
+// best is to put in mu-plugin, like wp-content/mu-plugins/some-file.php
+add_filter( 'posttype_term_archive_settings', '__return_false');
 ```
 
 
@@ -57,11 +65,10 @@ $url = apply_filters( 'post_type_term_link', '', $post_type, $term_slug, $taxono
 ```
 
 
+
 ToDo
 ----
 
- - [x] Option: WPSEO Canonical Archive URLs
- - [ ] Integrate POst Type archive Links (menu)
- - [ ] Allow post type Archive registering on a Settings Page.
  - [ ] Add Archive URLs to WPSEO.
  - [ ] More Testing with different Polylang setups.
+ - [ ] Refactor: put frontend nav menu to standalone singleton

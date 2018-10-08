@@ -1,7 +1,9 @@
 <?php
 
 namespace PosttypeTermArchive\Admin;
+
 use PosttypeTermArchive\Core;
+use PosttypeTermArchive\Settings;
 
 
 class Admin extends Core\Singleton {
@@ -44,6 +46,34 @@ class Admin extends Core\Singleton {
 
 		add_filter( 'customize_nav_menu_available_item_types', array( $this, 'customize_nav_menu_available_item_types' ) );
 
+		add_action( 'plugins_loaded', array( $this, 'plugins_loaded'), 0xffffffff );
+
+		add_filter( 'display_post_states', array( $this, 'post_states'), 10, 2 );
+
+	}
+
+	/**
+	 *	@filter display_post_states
+	 */
+	public function post_states( $states, $post ) {
+		if ( $post_type = $this->core->is_archive_page( $post->ID ) ) {
+			$pto = get_post_type_object( $post_type );
+			$states[] = sprintf( __('Page for %s', 'posttype-term-archive' ), $pto->labels->name );
+		}
+		return $states;
+	}
+
+	/**
+	 *	@action plugins_loaded (late)
+	 */
+	public function plugins_loaded() {
+
+		if ( ! apply_filters( 'posttype_term_archive_settings', true ) ) {
+			return;
+		}
+
+		Settings\SettingsPermalink::instance();
+		Settings\SettingsReading::instance();
 	}
 
 	/**
@@ -53,6 +83,7 @@ class Admin extends Core\Singleton {
 	public function admin_init() {
 
 		$this->archives = Core\Archive::get_archives();
+
 		foreach ( $this->archives as $archive ) {
 			$pto = $archive['post_type'];
 			foreach ( $archive['taxonomies'] as $tax => $txo ) {
