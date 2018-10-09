@@ -1,6 +1,15 @@
 PostType Term Archive
 =====================
 
+0.3.5
+-----
+ - Refactor WPSEO
+
+0.3.4
+-----
+ - Set page as Post Type archive
+ - Update german localization
+
 0.2.0
 -----
  - UI: Improve Nav-Menu editor

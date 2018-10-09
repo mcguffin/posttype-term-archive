@@ -16,9 +16,21 @@ class WPSEO extends Core\PluginComponent {
 
 		add_filter( 'wpseo_breadcrumb_links', array( $this, 'breadcrumb_links' ) );
 		add_filter( 'wpseo_canonical', array( $this, 'canonical' ) );
+		add_filter( 'posttype_term_archive_link', array( $this, 'archive_link' ), 10, 3 );
 //		add_filter( 'wpseo_breadcrumb_single_link', 'wpseo_post_type_taxonomy_breadcrumb_single_link', 10, 2 );
 
 	}
+
+	/**
+	 *	@filter posttype_term_archive_link
+	 */
+	public function archive_link( $archive_link, $term, $paged ) {
+		if ( is_front_page() ) {
+			$archive_link = WPSEO_Sitemaps_Router::get_base_url( '' );
+		}
+		return $archive_link;
+	}
+
 
 	/**
 	 *	@filter wpseo_canonical

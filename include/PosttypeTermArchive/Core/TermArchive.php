@@ -283,9 +283,7 @@ class TermArchive {
 			} else {
 
 				// add paged/%d
-				if ( is_front_page() && class_exists('WPSEO_Sitemaps_Router') ) {
-					$archive_link = WPSEO_Sitemaps_Router::get_base_url( '' );
-				}
+				$archive_link = apply_filters('posttype_term_archive_link', $archive_link, $term, $paged );
 				$archive_link = user_trailingslashit( trailingslashit( $archive_link ) . trailingslashit( $wp_rewrite->pagination_base ) . $paged );
 
 			}
