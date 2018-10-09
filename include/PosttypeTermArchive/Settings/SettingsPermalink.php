@@ -136,7 +136,10 @@ class SettingsPermalink extends Settings {
 		@list( $option_name, $pto, $taxo, $archive ) = array_values( $args );
 
 		$option_values	= get_option( $option_name );
-		$option_value	= isset( $option_values[$pto->name][$taxo->name] ) ? $option_values[$pto->name][$taxo->name] : array();
+		$option_value	= isset( $option_values[$pto->name][$taxo->name] ) ? $option_values[$pto->name][$taxo->name] : array(
+			'enabled'		=> false,
+			'show_in_menus'	=> false,
+		);
 
 		$id 	= sprintf( '%s-%s-%s', $option_name, $pto->name, $taxo->name );
 		$name	= sprintf( '%s[%s][%s]', $option_name, $pto->name, $taxo->name );
