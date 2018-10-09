@@ -27,7 +27,7 @@ class Admin extends Core\Singleton {
 	 *	@filter display_post_states
 	 */
 	public function post_states( $states, $post ) {
-		if ( $post_type = $this->archive->is_archive_page( $post->ID ) ) {
+		if ( $post_type = $this->archive->page_is_archive( $post->ID ) ) {
 			$pto = get_post_type_object( $post_type );
 			$states[] = sprintf( __('Page for %s', 'posttype-term-archive' ), $pto->labels->name );
 		}
