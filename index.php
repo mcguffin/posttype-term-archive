@@ -5,7 +5,7 @@ Plugin Name: PostType Term Archive
 Plugin URI: https://github.com/mcguffin/posttype-term-archive
 Description: Enter description here.
 Author: Jörn Lund
-Version: 0.3.6
+Version: 0.3.7
 Github Repository: mcguffin/posttype-term-archive
 Github Plugin URI: mcguffin/posttype-term-archive
 Author URI: https://github.com/mcguffin/
