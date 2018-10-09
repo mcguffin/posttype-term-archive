@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PostType Term Archive v0.1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-28T07:09:04+00:00\n"
-"PO-Revision-Date: 2018-06-28 09:13+0200\n"
+"POT-Creation-Date: 2018-10-09T10:40:10+00:00\n"
+"PO-Revision-Date: 2018-10-09 12:40+0200\n"
 "Last-Translator: Jörn Lund <joern@podpirate.org>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -17,43 +17,86 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c;_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;"
-"esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;"
-"esc_html_x:1,2c\n"
+"esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-Basepath: ..\n"
 "X-Textdomain-Support: yes\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: node_modules\n"
 
-#: include/api.php:38 include/api.php:56
+#: include/api.php:38 include/api.php:57
 msgid "Invalid Post Type %s"
-msgstr "Ungültiger Beitragstyp %s"
+msgstr "Ungültiger Inhaltstyp %s"
 
-#: include/api.php:41 include/api.php:59
+#: include/api.php:41 include/api.php:60
 msgid "Invalid Taxonomy %s"
 msgstr "Ungültige Taxonomie %s"
 
-#: include/PosttypeTermArchive/Admin/Admin.php:58
-msgid "Post Type Term Archives"
-msgstr "Beitragstyp-Begriffs-Archive"
+#: include/PosttypeTermArchive/Admin/Admin.php:32
+msgid "Page for %s"
+msgstr "Seite für %s"
 
-#: include/PosttypeTermArchive/Admin/Admin.php:117
+#: include/PosttypeTermArchive/Admin/NavMenuArchives.php:48
+#: include/PosttypeTermArchive/Admin/NavMenuArchives.php:109
+msgid "Post Types"
+msgstr "Inhaltstypen"
+
+#: include/PosttypeTermArchive/Admin/NavMenuArchives.php:90
+#: include/PosttypeTermArchive/Admin/NavMenuTermArchives.php:124
 msgid "Add to Menu"
-msgstr "ZUm Menü hinzufügen"
+msgstr "Zum Menü hinzufügen"
 
-#: include/PosttypeTermArchive/Admin/Admin.php:146
-#: include/PosttypeTermArchive/Admin/Admin.php:202
+#: include/PosttypeTermArchive/Admin/NavMenuArchives.php:113
+#: include/PosttypeTermArchive/Admin/NavMenuArchives.php:140
+msgid "Post Type Archive"
+msgstr "Inhaltstyp-Archiv"
+
+#: include/PosttypeTermArchive/Admin/NavMenuTermArchives.php:157
+#: include/PosttypeTermArchive/Admin/NavMenuTermArchives.php:213
 msgid "Post Type Term Archive"
-msgstr "Beitragstyp-Begriffs-Archiv"
+msgstr "Inhaltstyp-Begriffs-Archiv"
 
-#: include/PosttypeTermArchive/Core/Archive.php:76
-#: include/PosttypeTermArchive/Core/Archive.php:99
+#: include/PosttypeTermArchive/Core/Core.php:124
+msgid "Archive"
+msgstr "Archiv"
+
+#: include/PosttypeTermArchive/Core/TermArchive.php:193
+#: include/PosttypeTermArchive/Core/TermArchive.php:216
 msgid "Empty Term"
 msgstr "Leerer Begriff"
 
-#: include/PosttypeTermArchive/Core/Archive.php:107
+#: include/PosttypeTermArchive/Core/TermArchive.php:226
 msgid "Invalid post type"
-msgstr "Ungültiger Beitragstyp"
+msgstr "Ungültiger Inhaltstyp"
 
-#: include/PosttypeTermArchive/Core/Core.php:89
-msgid "Archive"
-msgstr "Archiv"
+#: include/PosttypeTermArchive/Settings/SettingsPermalink.php:72
+msgid "Post Type Term Archives"
+msgstr "Inhaltstyp-Begriffs-Archive"
+
+#: include/PosttypeTermArchive/Settings/SettingsPermalink.php:127
+#: include/PosttypeTermArchive/Settings/SettingsReading.php:88
+msgid "Enable permalinks for post-type keyword combinations like Book Genres."
+msgstr ""
+"Permalinks für Kombinationen aus Inhaltstyp und Begriffen – z.B. Buch-Genres."
+
+#: include/PosttypeTermArchive/Settings/SettingsPermalink.php:164
+msgctxt "Term Name"
+msgid "Example Term"
+msgstr "Beispiel-Begriff"
+
+#: include/PosttypeTermArchive/Settings/SettingsPermalink.php:165
+msgctxt "Term Slug"
+msgid "example-term"
+msgstr "beispiel-begriff"
+
+#: include/PosttypeTermArchive/Settings/SettingsReading.php:48
+msgid "Post Type Archives"
+msgstr "Inhaltstyp-Archive"
+
+#: include/PosttypeTermArchive/Settings/SettingsReading.php:106
+msgid "– Select –"
+msgstr "– Wähle –"
+
+#: include/PosttypeTermArchive/Settings/SettingsReading.php:119
+msgid "The page is alread archive for an other post type"
+msgstr ""
+"Diese Seite ist schon als Archiv für einen anderen Inhaltstyp eingestellt."

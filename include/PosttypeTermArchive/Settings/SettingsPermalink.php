@@ -102,16 +102,12 @@ class SettingsPermalink extends Settings {
 					$settings_section,
 					array(
 						'option_name'			=> $option_name,
-						'option_label'			=> __( 'Setting #1',  'posttype-term-archive' ),
-						'option_description'	=> __( 'Setting #1 description',  'posttype-term-archive' ),
 						'post_type'				=> $pto,
 						'taxonomy'				=> $taxo,
 						'archive'				=> $archive,
 						'class'					=> 'posttype-term-archive-setting',
 					)
 				);
-
-
 			}
 		}
 
@@ -137,7 +133,7 @@ class SettingsPermalink extends Settings {
 	 */
 	public function select_posttype_term_archives( $args ) {
 
-		@list( $option_name, $label, $description, $pto, $taxo, $archive ) = array_values( $args );
+		@list( $option_name, $pto, $taxo, $archive ) = array_values( $args );
 
 		$option_values	= get_option( $option_name );
 		$option_value	= isset( $option_values[$pto->name][$taxo->name] ) ? $option_values[$pto->name][$taxo->name] : array();
