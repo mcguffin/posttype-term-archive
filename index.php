@@ -44,6 +44,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'include/autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'include/api.php';
 
 Core\Core::instance( __FILE__ );
+Core\Archive::instance();
 
 if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 

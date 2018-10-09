@@ -50,7 +50,7 @@ class NavMenuTermArchives extends Core\Singleton {
 	 */
 	public function admin_init() {
 
-		$this->archives = Core\Archive::get_archives();
+		$this->archives = Core\TermArchive::get_archives();
 
 		foreach ( $this->archives as $archive ) {
 			$pto = $archive['post_type'];

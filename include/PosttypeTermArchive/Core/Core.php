@@ -21,64 +21,13 @@ class Core extends Plugin {
 
 
 		// posttype archive pages
-		add_filter( 'nav_menu_css_class', array( $this, 'nav_item_css_class' ), 10, 5 );
-		add_filter( 'page_link', array( $this, 'page_link' ), 10, 2 );
 
 		$args = func_get_args();
 		parent::__construct( ...$args );
 	}
 
 
-	/**
-	 *	@filter nav_menu_css_class
-	 */
-	public function nav_item_css_class( $classes, $item, $args, $depth ) {
 
-		if ( 'page' === $item->object ) {
-
-			if ( $this->is_archive_page( $item->object_id ) ) {
-				$classes[] = 'current-menu-parent';
-			}
-
-		}
-		return $classes;
-	}
-
-
-	/**
-	 *	@filter page_link
-	 */
-	public function page_link( $link, $post_id ) {
-
-		if ( $post_type = $this->is_archive_page( $post_id ) ) {
-			$link = get_post_type_archive_link( $post_type );
-		}
-
-		return $link;
-	}
-
-	/**
-	 *	Is $page_id a configured post type archive
-	 *	@return bool
-	 */
-	public function is_archive_page( $page_id ) {
-
-		return array_search( $page_id, get_option('post_type_archive_pages') );
-	}
-
-	/**
-	 *	@param $page
-	 *	@param $post_type
-	 */
-	public function get_post_type_archive_page_id( $post_type = 'post' ) {
-		if ( ! $archive_settings = get_option('post_type_archive_pages')) {
-			return false;
-		}
-		if ( ! isset( $archive_settings[ $post_type ] ) ) {
-			return false;
-		}
-		return $archive_settings[ $post_type ];
-	}
 
 	/**
 	 *	Load Compatibility classes
@@ -149,9 +98,10 @@ class Core extends Plugin {
 	}
 
 	/**
-	 * Assign menu item the appropriate url
-	 * @param  object $menu_item
-	 * @return object $menu_item
+	 *	Assign menu item the appropriate url
+	 *
+	 *	@param  object $menu_item
+	 *	@return object $menu_item
 	 */
 	public function setup_archive_item( $menu_item ) {
 		if ( $menu_item->type !== 'post_type_term_archive' )

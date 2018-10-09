@@ -82,7 +82,7 @@ class SettingsPermalink extends Settings {
 				continue;
 			}
 			foreach ( $taxo->object_type as $post_type ) {
-				$archive = Core\Archive::maybe_get( $post_type, $tax );
+				$archive = Core\TermArchive::maybe_get( $post_type, $tax );
 				if ( $archive && ! $archive->show_in_settings ) {
 					continue;
 				}
@@ -145,7 +145,7 @@ class SettingsPermalink extends Settings {
 		$id 	= sprintf( '%s-%s-%s', $option_name, $pto->name, $taxo->name );
 		$name	= sprintf( '%s[%s][%s]', $option_name, $pto->name, $taxo->name );
 		if ( ! $archive ) {
-			$archive = Core\Archive::get( $pto->name, $taxo->name );
+			$archive = Core\TermArchive::get( $pto->name, $taxo->name );
 		}
 		?>
 		<p>

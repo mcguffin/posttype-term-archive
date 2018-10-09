@@ -13,14 +13,14 @@
 function get_post_type_term_link( $post_type , $term , $taxonomy = '' ) {
 
 	if ( empty( $taxonomy ) ) {
-		$taxonomy = PosttypeTermArchive\Core\Archive::get_term_taxonomy( $term );
+		$taxonomy = PosttypeTermArchive\Core\TermArchive::get_term_taxonomy( $term );
 	}
 
 	if ( is_wp_error( $taxonomy ) ) {
 		return $taxonomy;
 	}
 
-	$inst = PosttypeTermArchive\Core\Archive::get( $post_type , $taxonomy );
+	$inst = PosttypeTermArchive\Core\TermArchive::get( $post_type , $taxonomy );
 
 	return $inst->get_link( $term );
 }
@@ -40,7 +40,7 @@ function register_post_type_taxonomy( $post_type , $taxonomy, $args = null ) {
 	if ( ! taxonomy_exists($taxonomy) ) {
 		return new WP_Error('post_type_taxonomy', sprintf(__('Invalid Taxonomy %s','posttype-term-archive'), $taxonomy ));
 	}
-	$ret = PosttypeTermArchive\Core\Archive::get( $post_type , $taxonomy, $args );
+	$ret = PosttypeTermArchive\Core\TermArchive::get( $post_type , $taxonomy, $args );
 
 	return $ret;
 }
@@ -60,7 +60,7 @@ function has_post_type_taxonomy( $post_type , $taxonomy ) {
 		return new WP_Error('post_type_taxonomy', sprintf(__('Invalid Taxonomy %s','posttype-term-archive'), $taxonomy ));
 	}
 
-	return PosttypeTermArchive\Core\Archive::has( $post_type , $taxonomy );
+	return PosttypeTermArchive\Core\TermArchive::has( $post_type , $taxonomy );
 }
 
 

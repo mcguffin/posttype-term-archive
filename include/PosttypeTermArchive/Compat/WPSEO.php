@@ -25,7 +25,7 @@ class WPSEO extends Core\PluginComponent {
 	 */
 	public function canonical( $canonical ) {
 
-		if ( ( $archive = Core\Archive::maybe_get() ) && $archive->canonical ) {
+		if ( ( $archive = Core\TermArchive::maybe_get() ) && $archive->canonical ) {
 
 			$paged = get_query_var( 'paged' ) > 1 ? get_query_var( 'paged' ) : false;
 
@@ -43,7 +43,7 @@ class WPSEO extends Core\PluginComponent {
 	 *	@action wpseo_prev_rel_link
 	 */
 	public function prev_rel_link( $link ) {
-		if ( $archive = Core\Archive::maybe_get() ) {
+		if ( $archive = Core\TermArchive::maybe_get() ) {
 			$paged = get_query_var( 'paged' ) - 1;
 			if ( $paged <= 1 ) {
 				$paged = false;
@@ -61,7 +61,7 @@ class WPSEO extends Core\PluginComponent {
 	 *	@action wpseo_next_rel_link
 	 */
 	public function next_rel_link( $link ) {
-		if ( $archive = Core\Archive::maybe_get() ) {
+		if ( $archive = Core\TermArchive::maybe_get() ) {
 			$paged = get_query_var( 'paged' ) + 1;
 			$url = $archive->get_link( get_queried_object(), $paged );
 			if ( ! is_wp_error( $url ) ) {
@@ -75,10 +75,21 @@ class WPSEO extends Core\PluginComponent {
 	 *	@filter wpseo_breadcrumb_links
 	 */
 	public function breadcrumb_links( $links ) {
+		$archive = Core\Archive::instance();
 		if ( is_post_type_archive() && is_category() || is_tag() || is_tax() ) {
 			$term = get_queried_object();
 			$links[] = array(
 				'term'	=> $term,
+			);
+		} else if ( $page_id = $archive->get_current_post_type_archive_page() ) {
+			array_pop($links);
+			foreach ( get_post_ancestors($page_id) as $id ) {
+				$links[] = array(
+					'id'	=> $id,
+				);
+			};
+			$links[] = array(
+				'id'	=> $page_id,
 			);
 		}
 		return $links;
