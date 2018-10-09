@@ -88,22 +88,44 @@ class WPSEO extends Core\PluginComponent {
 	 */
 	public function breadcrumb_links( $links ) {
 		$archive = Core\Archive::instance();
-		if ( is_post_type_archive() && is_category() || is_tag() || is_tax() ) {
+		if ( is_post_type_archive() && is_category() || is_tag() || is_tax() ) { // is pt term archive
 			$term = get_queried_object();
 			$links[] = array(
 				'term'	=> $term,
 			);
-		} else if ( $page_id = $archive->get_current_post_type_archive_page() ) {
+		} else if ( $page_id = $archive->get_current_post_type_archive_page() ) { // is pt-archive with page
+
 			array_pop($links);
-			foreach ( get_post_ancestors($page_id) as $id ) {
+
+			$links = $this->append_ancestors( $links, $page_id );
+		} else if ( is_singular() && ( $post_type = get_post_type() ) && ( $page_id = $archive->get_archive_page_id( $post_type ) ) ) {
+			var_dump( $links );
+
+			$last = array_pop($links);
+
+			array_pop( $links );
+
+			$links = $this->append_ancestors( $links, $page_id );
+			$links[] = $last;
+
+		}
+		return $links;
+	}
+
+	/**
+	 *
+	 */
+	private function append_ancestors( $links, $page_id ) {
+		if ( $ancestors = get_post_ancestors($page_id) ) {
+			foreach ( $ancestors as $id ) {
 				$links[] = array(
 					'id'	=> $id,
 				);
 			};
-			$links[] = array(
-				'id'	=> $page_id,
-			);
 		}
+		$links[] = array(
+			'id'	=> $page_id,
+		);
 		return $links;
 	}
 

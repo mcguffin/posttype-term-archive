@@ -57,10 +57,13 @@ class Archive extends Singleton {
 
 		$core = Core::instance();
 
-		if ( $archive_page_id = $this->get_current_post_type_archive_page( $post_type ) ) {
+		if ( $archive_page_id = $this->get_archive_page_id( $post_type ) ) {
 
 			if ( $post_type_object->rewrite ) {
 				global $wp_post_types;
+
+				$post_type_object->remove_rewrite_rules();
+
 				if ( $post_type_object->rewrite === true ) {
 					$post_type_object->rewrite = get_page_uri( $archive_page_id );
 				} else if ( is_array( $post_type_object->rewrite ) ) {
@@ -68,6 +71,7 @@ class Archive extends Singleton {
 				}
 
 				$wp_post_types[ $post_type ] = $post_type_object;
+
 				$post_type_object->add_rewrite_rules();
 			}
 		}
@@ -122,8 +126,19 @@ class Archive extends Singleton {
 	 */
 	public function nav_item_css_class( $classes, $item, $args, $depth ) {
 
-		if ( 'page' === $item->object && ( $post_type = $this->page_is_archive( $item->object_id ) ) && is_post_type_archive( $post_type ) ) {
-			$classes[] = 'current-menu-item';
+		if ( 'page' === $item->object && ( $post_type = $this->page_is_archive( $item->object_id ) ) ) {
+
+			if ( is_post_type_archive( $post_type ) ) {
+				$classes[] = 'current-menu-item';
+				$classes[] = 'current_page_item';
+			} else if ( is_singular( $post_type ) ) {
+				$classes[] = 'current-menu-parent';
+				$classes[] = 'current-menu-ancestor';
+				$classes[] = 'current-page-parent';
+				$classes[] = 'current-page-ancestor';
+				$classes[] = 'current_page_parent';
+				$classes[] = 'current_page_ancestor';
+			}
 		}
 		return $classes;
 	}

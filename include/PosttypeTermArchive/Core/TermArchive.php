@@ -349,7 +349,8 @@ class TermArchive {
 		} else {
 			$newrules = $rules;
 		}
-
+// foreach ($newrules as $reg=>$rule)
+// echo "$reg          $rule\n";
 
 		return $newrules;
 	}
