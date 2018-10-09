@@ -15,7 +15,7 @@ class Admin extends Core\Singleton {
 	 */
 	protected function __construct() {
 
-		$this->archive = Core\Archive::instance();
+		$this->archive = Core\TermArchive::instance();
 
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded'), 0xffffffff );
 
