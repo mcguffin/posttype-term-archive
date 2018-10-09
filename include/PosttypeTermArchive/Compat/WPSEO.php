@@ -99,7 +99,6 @@ class WPSEO extends Core\PluginComponent {
 
 			$links = $this->append_ancestors( $links, $page_id );
 		} else if ( is_singular() && ( $post_type = get_post_type() ) && ( $page_id = $archive->get_archive_page_id( $post_type ) ) ) {
-			var_dump( $links );
 
 			$last = array_pop($links);
 
