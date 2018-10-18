@@ -51,9 +51,6 @@ class Archive extends Singleton {
 	public function do_header() {
 		// setup post data
 		if ( $page_id = $this->get_current_post_type_archive_page() ) {
-			if ( ! has_action('done_header')) {
-				return;
-			}
 
 			global $post;
 			if ( is_null( $this->prev_post ) ) {
