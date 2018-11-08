@@ -185,7 +185,7 @@ class Plugin extends Singleton {
 	public static function uninstall() {
 		foreach ( self::$components as $component ) {
 			$comp = $component::instance();
-			$comp->deactivate();
+			$comp->uninstall();
 		}
 	}
 
