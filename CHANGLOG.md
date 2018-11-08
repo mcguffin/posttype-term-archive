@@ -1,6 +1,10 @@
 PostType Term Archive
 =====================
 
+0.3.9
+-----
+ - Fix uninstall
+
 0.3.5
 -----
  - Refactor WPSEO
