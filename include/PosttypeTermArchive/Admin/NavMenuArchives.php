@@ -82,7 +82,7 @@ class NavMenuArchives extends Core\Singleton {
 		$html .= 	'<span class="add-to-menu">';
 		$html .= 		sprintf('<input type="submit" %1$s ' .
 							'class="button-secondary submit-add-to-menu add-post-type-term-menu-item right" value="%2$s" '.
-							'name="add-post-type-rchive-menu-item" id="submit-post-type-archive" '.
+							'name="add-post-type-archive-menu-item" id="submit-post-type-archive" '.
 							'data-action="%3$s" data-nonce="%4$s" '.
 							 '/>',
 

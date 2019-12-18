@@ -1,7 +1,7 @@
 {
   "name": "posttype-term-archive",
-  "version": "0.0.1",
-  "description": "Plugin description",
+  "version": "0.3.10",
+  "description": "Managing Wordpress PostType and Term Archives",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,14 +16,104 @@
     "url": "https://github.com//posttype-term-archive/issues"
   },
   "homepage": "https://github.com//posttype-term-archive#readme",
+  "engines": {
+    "node": "12.4.0",
+    "npm": "^6.9.0"
+  },
+  "browserslist": [
+    "last 3 versions",
+    "> 0.125%",
+    "IE 10"
+  ],
   "devDependencies": {
-    "gulp": "*",
-    "gulp-autoprefixer": "*",
-    "gulp-concat": "*",
-    "gulp-rename": "*",
-    "gulp-sass": "*",
-    "gulp-sourcemaps": "*",
-    "gulp-uglify": "*",
-    "gulp-util": "*"
+    "@babel/core": "^7.5.4",
+    "@babel/plugin-proposal-class-properties": "^7.5.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/preset-env": "^7.5.4",
+    "@fortawesome/fontawesome-free": "^5.11.2",
+    "aria-collapsible": "^2.2.1",
+    "babelify": "^10.0.0",
+    "bootstrap": "^4.3.1",
+    "browserify": "^16.3.0",
+    "browserify-shim": "^3.8.14",
+    "event-stream": "^4.0.1",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^6.1.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify": "^3.0.2",
+    "hammerjs": "^2.0.8",
+    "intersection-observer": "^0.7.0",
+    "popper.js": "^1.16.0",
+    "resize-observer-polyfill": "^1.5.1",
+    "swiped-events": "^1.0.9",
+    "tinyify": "^2.5.2",
+    "ttf2woff": "^2.0.1",
+    "ttf2woff2": "^3.0.0",
+    "uglifyify": "^5.0.2",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0"
+  },
+  "browserify-shim": {
+    "jquery": "global:jQuery",
+    "backbone": "global:Backbone",
+    "lodash": "global:lodash",
+    "@wordpress/blob": "global:wp.blob",
+    "@wordpress/blocks": "global:wp.blocks",
+    "@wordpress/block-editor": "global:wp.blockEditor",
+    "@wordpress/block-library": "global:wp.blockLibrary",
+    "@wordpress/components": "global:wp.components",
+    "@wordpress/compose": "global:wp.compose",
+    "@wordpress/data": "global:wp.data",
+    "@wordpress/dom": "global:wp.dom",
+    "@wordpress/editor": "global:wp.editor",
+    "@wordpress/element": "global:wp.element",
+    "@wordpress/format-library": "global:wp.formatLibrary",
+    "@wordpress/hooks": "global:wp.hooks",
+    "@wordpress/i18n": "global:wp.i18n",
+    "@wordpress/keycodes": "global:wp.keycodes",
+    "@wordpress/rich-text": "global:wp.richText"
+  },
+  "dependencies": {
+    "@wordpress/blob": "^2.5.1",
+    "@wordpress/block-editor": "^3.2.2",
+    "@wordpress/block-library": "^2.9.2",
+    "@wordpress/blocks": "^6.7.2",
+    "@wordpress/components": "^8.3.2",
+    "@wordpress/compose": "^3.7.2",
+    "@wordpress/data": "^4.9.2",
+    "@wordpress/dom": "^2.5.2",
+    "@wordpress/editor": "^9.7.2",
+    "@wordpress/element": "^2.8.2",
+    "@wordpress/format-library": "^1.9.2",
+    "@wordpress/i18n": "^3.6.1",
+    "@wordpress/keycodes": "^2.6.2",
+    "@wordpress/media-utils": "^1.2.2",
+    "@wordpress/rich-text": "^3.7.2",
+    "jquery": "^1.12.4"
+  },
+  "wporg": {
+    "steps": [
+      "build",
+      "git",
+      "github"
+    ],
+    "type": "plugin",
+    "build": {
+      "prebuild": [
+        "wp i18n make-pot . languages/posttype-term-archive.pot --domain=posttype-term-archive --exclude=tmp"
+      ],
+      "build": [
+        "gulp build"
+      ]
+    },
+    "git": {
+      "host": "github.com",
+      "user": "mcguffin"
+    },
+    "wporg": {
+      "assets": ".wporg"
+    }
   }
 }

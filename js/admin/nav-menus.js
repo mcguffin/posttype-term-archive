@@ -1,38 +1,4 @@
-(function($){
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+!function(e){function t(t){console.log(t),t.preventDefault();var n=e(this),o=n.closest(".inside").find('[type="checkbox"]:checked'),c=n.next(".spinner").show(),i=[];o.each(function(){i.push(e(this).val())}),n.prop("disabled",!0),e.post(pt_term_archives.ajaxurl,{action:e(this).data("action"),posttypearchive_nonce:e(this).data("nonce"),items:i,nonce:e(this).data("nonce")},function(t){e("#menu-to-edit").append(t),c.hide(),o.prop("checked",!1),n.prop("disabled",!1)})}e(document).ready(function(){e(".add-post-type-term-menu-item").on("click",t)})}(jQuery);
 
-	$( document ).ready(function(){
-		$( '.add-post-type-term-menu-item').click( function(e) {
-
-			e.preventDefault();
-
-			var $submit = $(this),
-				$list_items = $submit.closest('.inside').find('[type="checkbox"]:checked'),
-				$spinner = $submit.next('.spinner').show(),
-				items = [];
-
-			$list_items.each( function() {
-				items.push( $( this ).val() );
-			});
-
-			// Disable button
-			$submit.prop( 'disabled', true );
-
-			// Send checked post types with our action, and nonce
-			$.post( pt_term_archives.ajaxurl, {
-					action: 				$(this).data('action'),
-					posttypearchive_nonce:	$(this).data('nonce'),
-					items:					items,
-					nonce:					$(this).data('nonce')
-				},
-
-				// AJAX returns html to add to the menu, hide spinner, remove checks
-				function( response ) {
-					$( '#menu-to-edit' ).append( response );
-					$spinner.hide();
-					$list_items.prop("checked", false);
-					$submit.prop( 'disabled', false );
-				}
-			);
-		});
-	});
-})(jQuery);
+},{}]},{},[1]);

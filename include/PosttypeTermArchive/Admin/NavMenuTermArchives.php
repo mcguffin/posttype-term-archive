@@ -233,7 +233,7 @@ class NavMenuTermArchives extends Core\Singleton {
 		}
 
 		if ( empty( $this->archives ) ) {
-			return;
+			//return;
 		}
 
 		wp_register_script(
