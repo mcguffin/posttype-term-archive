@@ -1,15 +1,15 @@
-# Copyright (C) 2019 Jörn Lund
+# Copyright (C) 2020 Jörn Lund
 # This file is distributed under the same license as the PostType Term Archive plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: PostType Term Archive 0.3.10\n"
+"Project-Id-Version: PostType Term Archive 0.3.11\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/posttype-term-archive\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-12-18T14:15:00+00:00\n"
+"POT-Creation-Date: 2020-11-12T12:04:12+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: posttype-term-archive\n"

@@ -1,6 +1,6 @@
 {
   "name": "posttype-term-archive",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "description": "Managing Wordpress PostType and Term Archives",
   "private": true,
   "scripts": {
@@ -102,6 +102,7 @@
     ],
     "type": "plugin",
     "build": {
+      "versionedFiles": null,
       "prebuild": [
         "wp i18n make-pot . languages/posttype-term-archive.pot --domain=posttype-term-archive --exclude=tmp"
       ],
