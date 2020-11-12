@@ -6,7 +6,6 @@ Plugin URI: https://github.com/mcguffin/posttype-term-archive
 Description: Managing Wordpress PostType and Term Archives
 Author: Jörn Lund
 Version: 0.3.10
-Github Repository: mcguffin/posttype-term-archive
 Github Plugin URI: mcguffin/posttype-term-archive
 Author URI: https://github.com/mcguffin/
 License: GPL3
@@ -51,20 +50,5 @@ if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 	Admin\Admin::instance();
 	Admin\NavMenuArchives::instance();
 	Admin\NavMenuTermArchives::instance();
-
-
-	if ( ! file_exists( plugin_dir_path(__FILE__) . '/.git/' ) ) {
-
-		// not a git. Check if https://github.com/afragen/github-updater is active. (function is_plugin_active not available yet)
-		$active_plugins = get_option('active_plugins');
-		if ( $sitewide_plugins = get_site_option('active_sitewide_plugins') ) {
-			$active_plugins = array_merge( $active_plugins, array_keys( $sitewide_plugins ) );
-		}
-
-		if ( ! in_array( 'github-updater/github-updater.php', $active_plugins ) ) {
-			// not github updater. Init our our own...
-			AutoUpdate\AutoUpdateGithub::instance();
-		}
-	}
 
 }
